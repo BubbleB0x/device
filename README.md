@@ -54,3 +54,18 @@ ________________________________________________________________________________
 		* *Device_Sleep&Wake*: Device con ESP32 in DeepSleep (grande risparmio di batteria)
 	* *RFNANO*: Modulo RFNano con NRF24L01 per scandagliare l'area alla ricerca dei device vicini (consuma meno del modulo ESP32 e viene usato solo per scandagliare l'area) funziona a supporto dell'ESP32
 * *Business PLan e Presentazione* : Business plan e presentazione dell'intero progetto
+
+_______________________________________________________________________________________________________
+
+## Firmware Schede ##
+________________________________________________________________________________________________________
+* Clonare la repo
+	- `git clone https://orteip94@bitbucket.org/bbteam_/bubblebox-device.git`
+* Installare i firmware sulle schede:
+	- Aprire Arduino IDE
+	- Inserire la scheda RFNAno
+	- Arduino IDE > Strumenti > Scheda > Arduino Nano > Processore:ATMega328P
+	- Installare sketch contenuto nella directory `Device/RFNano`
+	- Inserire la scheda ESP32
+	- Arduino IDE > Strumenti > Scheda > DOIT ESP32 DEVKIT V1 
+	- Installare sketch contenuto nella directory `Device/ESP32/Device_Sleep&Wake`
