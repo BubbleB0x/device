@@ -41,3 +41,16 @@ ________________________________________________________________________________
 	- Arduino IDE > Sketch > #Include libreria > Aggiungi libreria da file .ZIP
 * Installazione [librerie NRF24L01](https://github.com/maniacbug/RF24)
 	- Arduino IDE > Sketch > #Include libreria > Aggiungi libreria da file .ZIP
+
+_____________________________________________________________________________________________________
+	
+## Directory Tree ##
+_____________________________________________________________________________________________________
+
+* *Logo*: Logo del progetto e del device
+* *Device*: Moduli che compongono il device
+	* *ESP32*:
+		* *Device_SempreAttivi*: Device con ESP32 sempre in funzione (grande spreco di batteria)
+		* *Device_Sleep&Wake*: Device con ESP32 in DeepSleep (grande risparmio di batteria)
+	* *RFNANO*: Modulo RFNano con NRF24L01 per scandagliare l'area alla ricerca dei device vicini (consuma meno del modulo ESP32 e viene usato solo per scandagliare l'area) funziona a supporto dell'ESP32
+* *Business PLan e Presentazione* : Business plan e presentazione dell'intero progetto
