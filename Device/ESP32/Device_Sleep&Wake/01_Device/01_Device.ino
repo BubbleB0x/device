@@ -12,13 +12,18 @@
  * Prof: Aldo Franco Dragoni
  * 
  */
-
+// Librerie ESP32 BLE 
 #include <BLEAdvertisedDevice.h>
 #include <BLEDevice.h>
 #include <BLEScan.h>
 #include <BLEUtils.h>
 #include <Arduino.h>
 #include <BLESecurity.h>
+
+// Librerie Displey OLED
+#include <Wire.h>               // Only needed for Arduino 1.6.5 and earlier
+#include "SSD1306Wire.h"        // legacy: #include "SSD1306.h"
+SSD1306Wire display(0x3c, 21, 22);
 
 // Nome, MAC Address, Rssi e Manifattura del dispositivo trovato
 String MAC;
@@ -47,6 +52,8 @@ const int RF_Nano = 25;
 
 void setup() 
 {
+  display.init();
+  display.flipScreenVertically();
   pinMode(RF_Nano, INPUT);
   ControlTimeWake = 0;
   Serial.begin(115200);
@@ -56,6 +63,7 @@ void setup()
 void loop() 
 {
   ++ControlTimeWake;
+  accendiDisplay();
   // Scansione area per trovare i device con BLE nelle vicinanze
   scanArea(); 
   // Disconnesione dei dispositivi che si connettono
@@ -63,8 +71,9 @@ void loop()
 
   // Controllo per accendere o tener acceso il device in base a quanto tempo rimane in attesa o se non riceve nessun segnale dall'RFNANO
   // Controllo tempo di accensione e RF-NANO non trova device nei dintorni
-  if(ControlTimeWake == 20 && digitalRead(RF_Nano) == LOW)
+  if(ControlTimeWake == 15 && digitalRead(RF_Nano) == LOW)
   {
+    spegniDisplay();
     setSleepWake();
   }
   else
@@ -199,4 +208,40 @@ void print_GPIO_wake_up(){
   int GPIO_reason = esp_sleep_get_ext1_wakeup_status();
   Serial.print("GPIO that triggered the wake up: GPIO ");
   Serial.println((log(GPIO_reason))/log(2), 0);
+}
+
+// Accensione del display e visualizzazione della data e ora
+void accendiDisplay()
+{
+  if (ControlTimeWake < 10)
+  {
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.setFont(ArialMT_Plain_24);
+    display.drawRect(25, 15, 80, 35);
+    display.drawString(64, 20, "00:00");
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "01-01-2000");
+    display.display();
+  }
+  else
+  {
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.setFont(ArialMT_Plain_24);
+    display.drawCircle(64, 20, 30);
+    display.drawString(64, 20, "10");
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "PERSONE INCONTRATE");
+    display.display();
+  }
+  
+}
+
+// Spegnimento diplay
+void spegniDisplay()
+{
+  display.displayOff();
 }
