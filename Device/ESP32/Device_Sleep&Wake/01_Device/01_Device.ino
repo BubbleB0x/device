@@ -34,6 +34,8 @@ int Rssi_device = 0;
 // MAC Address BLE di questo dispositivo
 String MyMAC;
 
+bool BubbleBoxTrovato = false;
+
 // Caratteristiche rete BLE del decvice
 #define SERVICE_UUID "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 #define CHARACTERISTIC_UUID_RX "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
@@ -50,10 +52,19 @@ RTC_DATA_ATTR int bootCount = 0; // Conteggio boot device
 int ControlTimeWake = 0; // Controllo tempo di Wake
 const int RF_Nano = 25;
 
+// Bottone che cambia la schermata del sisplay OLED
+const int statoDisplay = 14;
+int numeroDisplay = 0;
+
 void setup() 
 {
+  BubbleBoxTrovato = false;
+  
+  numeroDisplay = 0;
+  pinMode(statoDisplay, INPUT);
   display.init();
   display.flipScreenVertically();
+  
   pinMode(RF_Nano, INPUT);
   ControlTimeWake = 0;
   Serial.begin(115200);
@@ -63,7 +74,10 @@ void setup()
 void loop() 
 {
   ++ControlTimeWake;
+  
+  controlloCambioDisplay(); // Controllo per vedere se è stato premuto il tasto di cambio schermo
   accendiDisplay();
+  
   // Scansione area per trovare i device con BLE nelle vicinanze
   scanArea(); 
   // Disconnesione dei dispositivi che si connettono
@@ -96,7 +110,7 @@ void scanArea()
   Serial.print(MyMAC);
   Serial.print("\n#############################################################");
   BLEScan* pBLEScan = BLEDevice::getScan();
-  pBLEScan->setActiveScan(true);
+  pBLEScan->setActiveScan(true);  
   // Attivo la scansione BLE ogni secondo
   BLEScanResults results = pBLEScan->start(1); 
   Serial.println("\n-----------------------------DISPOSITIVI--------------------------------");
@@ -126,6 +140,7 @@ void scanArea()
     // Controllo del probabile contatto con un'altra persona che possiede un altro BubbleBox
     if(Name == "BubbleBox" && Rssi_device > -75)
     {
+      BubbleBoxTrovato = true;
       Serial.println("\n\n------------------------CONSIDERA IL SEGNALE----------------------------");
       Serial.println("\n----------------------------CONTATTO AVVENUTO!----------------------------");
     }
@@ -213,8 +228,9 @@ void print_GPIO_wake_up(){
 // Accensione del display e visualizzazione della data e ora
 void accendiDisplay()
 {
-  if (ControlTimeWake < 10)
+  switch (numeroDisplay)
   {
+    case 0:
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -224,9 +240,13 @@ void accendiDisplay()
     display.setFont(ArialMT_Plain_10);
     display.drawString(64, 50, "01-01-2000");
     display.display();
-  }
-  else
-  {
+    if(BubbleBoxTrovato)
+    {
+      displayBubbleBoxContatto();
+    }
+    break;
+
+    case 1:
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -236,12 +256,33 @@ void accendiDisplay()
     display.setFont(ArialMT_Plain_10);
     display.drawString(64, 50, "PERSONE INCONTRATE");
     display.display();
+    break; 
   }
-  
 }
 
 // Spegnimento diplay
 void spegniDisplay()
 {
   display.displayOff();
+}
+
+void controlloCambioDisplay()
+{
+  if(digitalRead(statoDisplay) == HIGH)
+  {
+    ControlTimeWake = 0;
+    ++numeroDisplay;  
+    if(numeroDisplay > 1)
+    {
+      numeroDisplay = 0;  
+    }
+  }
+}
+
+void displayBubbleBoxContatto()
+{
+  display.setTextAlignment(TEXT_ALIGN_CENTER);
+  display.setFont(ArialMT_Plain_10);
+  display.drawString(64, 0, "BUBBLEBOX TROVATO!");
+  display.display();
 }
