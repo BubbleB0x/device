@@ -25,6 +25,11 @@
 #include "SSD1306Wire.h"        // legacy: #include "SSD1306.h"
 SSD1306Wire display(0x3c, 21, 22);
 
+// Librerie Modulo scheda SD per memorizzare i dati
+#include "FS.h"
+#include "SD.h"
+#include "SPI.h"
+
 // Nome, MAC Address, Rssi e Manifattura del dispositivo trovato
 String MAC;
 String Name;
@@ -58,7 +63,9 @@ int numeroDisplay = 0;
 
 void setup() 
 {
-  BubbleBoxTrovato = false;
+  setSDCard(); // Setto l'SD card
+  
+  BubbleBoxTrovato = false; // setto la variabile del ritrovamento dispositivo a false
   
   numeroDisplay = 0;
   pinMode(statoDisplay, INPUT);
@@ -76,7 +83,7 @@ void loop()
   ++ControlTimeWake;
   
   controlloCambioDisplay(); // Controllo per vedere se è stato premuto il tasto di cambio schermo
-  accendiDisplay();
+  accendiDisplay(); // ACCENDO IL DISPLAY
   
   // Scansione area per trovare i device con BLE nelle vicinanze
   scanArea(); 
@@ -100,6 +107,8 @@ void loop()
   }
 }
 
+//--------------------------BLE ESP32--------------------------------------------
+//--------------------------------------------------------------------------------
 /*
  * Scansione area per il ritrovamento di altri device BLE
  */
@@ -141,6 +150,7 @@ void scanArea()
     if(Name == "BubbleBox" && Rssi_device > -75)
     {
       BubbleBoxTrovato = true;
+      scriviContatto(MAC);
       Serial.println("\n\n------------------------CONSIDERA IL SEGNALE----------------------------");
       Serial.println("\n----------------------------CONTATTO AVVENUTO!----------------------------");
     }
@@ -178,6 +188,8 @@ void disconnectedDeviceBLE()
   pServer->disconnect(pServer->getConnId());
 }
 
+//----------------------SLEEP & WAKE ESP32----------------------------------------
+//--------------------------------------------------------------------------------
 // Settagio dello sleep&wake del device e partenza device
 void setSleepWake()
 {
@@ -225,6 +237,8 @@ void print_GPIO_wake_up(){
   Serial.println((log(GPIO_reason))/log(2), 0);
 }
 
+//--------------------------DISPLAY SETUP ON/OFF--------------------------------------------------
+//--------------------------------------------------------------------------------
 // Accensione del display e visualizzazione della data e ora
 void accendiDisplay()
 {
@@ -285,4 +299,62 @@ void displayBubbleBoxContatto()
   display.setFont(ArialMT_Plain_10);
   display.drawString(64, 0, "BUBBLEBOX TROVATO!");
   display.display();
+}
+
+//-----------------------SD CARD DATA STORAGE & SETUP------------------------------------
+//--------------------------------------------------------------------------------
+void setSDCard()
+{
+  if(!SD.begin()){
+        Serial.println("Card Mount Failed");
+        return;
+    }
+    uint8_t cardType = SD.cardType();
+
+    if(cardType == CARD_NONE){
+        Serial.println("No SD card attached");
+        return;
+    }
+    uint64_t cardSize = SD.cardSize() / (1024 * 1024);
+    Serial.printf("SD Card Size: %lluMB\n", cardSize);
+
+    writeFile(SD, "/contacts2020_04_04.txt", "");
+}
+
+void scriviContatto(String contact)
+{
+  String inserimento = "Mio MAC: " + MyMAC + " | CONTACT: " + contact + " | DATA: " + "Data \n"; 
+  appendFile(SD, "/contacts2020_04_04.txt", inserimento.c_str());
+}
+
+void writeFile(fs::FS &fs, const char * path, const char * message){
+    Serial.printf("Writing file: %s\n", path);
+
+    File file = fs.open(path, FILE_WRITE);
+    if(!file){
+        Serial.println("Failed to open file for writing");
+        return;
+    }
+    if(file.print(message)){
+        Serial.println("File written");
+    } else {
+        Serial.println("Write failed");
+    }
+    file.close();
+}
+
+void appendFile(fs::FS &fs, const char * path, const char * message){
+    Serial.printf("Appending to file: %s\n", path);
+
+    File file = fs.open(path, FILE_APPEND);
+    if(!file){
+        Serial.println("Failed to open file for appending");
+        return;
+    }
+    if(file.print(message)){
+        Serial.println("Message appended");
+    } else {
+        Serial.println("Append failed");
+    }
+    file.close();
 }
