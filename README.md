@@ -75,3 +75,19 @@ ________________________________________________________________________________
 	- Inserire la scheda ESP32
 	- Arduino IDE > Strumenti > Scheda > DOIT ESP32 DEVKIT V1 
 	- Installare sketch contenuto nella directory `Sketch Device/ESP32/Device_Sleep&Wake`
+	
+_______________________________________________________________________________________________________
+
+## Consumi costi e caratteristiche componenti ##
+________________________________________________________________________________________________________
+
+| *Componente* | *Consumo Wake* |  *Consumo DeepSleep*  | *Prezzo* | *Caratteristiche* |
+| -----------|---------|-------------|--------|-----------------|
+|   ESP32    | 50mA    |  0,05 mA     |   9€   |   Wi-Fi & BLE   |
+|   RF-NANO  | 19mA    |    0,05 mA   |   8€   |   Radio Wave    |
+|Display OLED| 40mA    |   0,9 mA     |   8€   |   Display 0.96" |
+| Lettore SD |  1mA    |   0 mA      |   5€   |   Data Storage  |
+| Modulo RTC |0,8mA    | 0,08 mA     |   6€   | Orologio e data |
+|Modulo GSM |  50mA    | 0,7 mA      | 9€     | Comunicazione dati tramite scheda SIM |
+|  |   *Totale*  |  *Totale* |  *Totale*  |  |
+|   - | 160,8 mA   |  1,78 mA     |   45€   |   -   |
