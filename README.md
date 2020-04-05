@@ -24,6 +24,7 @@ ________________________________________________________________________________
 * Display LED
 * Modulo RTC
 * Modulo GSM
+* Modulo scheda SD
 
 -----------------------------------------------------------------------------------------------------
 
@@ -33,14 +34,17 @@ ________________________________________________________________________________
 
 * Installazione [IDE Arduino](https://www.arduino.cc/en/Main/Software)
 * Installazione CORE ESP32:
-	- Arduino IDE > File > Impostazioni > Schede > URL Schede > "https://dl.espressif.com/dl/package_esp32_index.json"
+	- Arduino IDE > File > Impostazioni > Schede > URL Schede > `https://dl.espressif.com/dl/package_esp32_index.json`
 	- Arduino IDE > Strumenti > Scheda > Gestore Schede > ESP32
 	- Arduino IDE > Strumenti > Scheda > DOIT ESP32 DEVKIT V1 
-* Installazione [librerie ESP32](https://github.com/espressif/arduino-esp32)
-	- Il link contiene tantissime librery per il device ESP32, tuttavia, nella repo è presente solamente la libvreria utile che viene utilizzata (per facilitare l'inizializzazione)
-	- Arduino IDE > Sketch > #Include libreria > Aggiungi libreria da file .ZIP
-* Installazione [librerie NRF24L01](https://github.com/maniacbug/RF24)
-	- Arduino IDE > Sketch > #Include libreria > Aggiungi libreria da file .ZIP
+* Installazione Librerie:
+	* Installazione [librerie ESP32](https://github.com/espressif/arduino-esp32)
+		- Il link contiene tantissime librery per il device ESP32, tuttavia, nella repo è presente solamente la libvreria utile che viene utilizzata (per facilitare l'inizializzazione)
+		- Arduino IDE > Sketch > #Include libreria > Aggiungi libreria da file .ZIP
+	* Installazione [librerie NRF24L01](https://github.com/maniacbug/RF24)
+		- Arduino IDE > Sketch > #Include libreria > Aggiungi libreria da file .ZIP
+	
+	----------> TUTTE LE LIBRERIE CHE SERVONO SONO INSERITE NELLA DIRECTORY `/Library`
 
 _____________________________________________________________________________________________________
 	
@@ -48,13 +52,14 @@ ________________________________________________________________________________
 _____________________________________________________________________________________________________
 
 * *Logo*: Logo del progetto e del device
-* *Device*: Moduli che compongono il device
+* *Skecth Device*:
 	* *ESP32*:
 		* *Device_SempreAttivi*: Device con ESP32 sempre in funzione (grande spreco di batteria)
 		* *Device_Sleep&Wake*: Device con ESP32 in DeepSleep (grande risparmio di batteria)
 	* *RFNANO*: Modulo RFNano con NRF24L01 per scandagliare l'area alla ricerca dei device vicini (consuma meno del modulo ESP32 e viene usato solo per scandagliare l'area) funziona a supporto dell'ESP32
-* *Business PLan e Presentazione* : Business plan e presentazione dell'intero progetto
+* *Business Plan e Presentazione* : Business plan e presentazione dell'intero progetto
 * *Schema*: Immagine rappresentativa del funzionamento del device
+* *Library*: Contiene tutte le librerie che servono ai componenti per poter funzionare
 
 _______________________________________________________________________________________________________
 
@@ -62,11 +67,11 @@ ________________________________________________________________________________
 ________________________________________________________________________________________________________
 * Clonare la repo
 	- `git clone https://orteip94@bitbucket.org/bbteam_/bubblebox-device.git`
-* Installare i firmware sulle schede:
+* Installare gli sketch sulle schede:
 	- Aprire Arduino IDE
 	- Inserire la scheda RFNAno
 	- Arduino IDE > Strumenti > Scheda > Arduino Nano > Processore:ATMega328P
-	- Installare sketch contenuto nella directory `Device/RFNano`
+	- Installare sketch contenuto nella directory `Sketch Device/RFNano`
 	- Inserire la scheda ESP32
 	- Arduino IDE > Strumenti > Scheda > DOIT ESP32 DEVKIT V1 
-	- Installare sketch contenuto nella directory `Device/ESP32/Device_Sleep&Wake`
+	- Installare sketch contenuto nella directory `Sketch Device/ESP32/Device_Sleep&Wake`
