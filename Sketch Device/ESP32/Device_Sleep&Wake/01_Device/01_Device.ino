@@ -157,7 +157,6 @@ void scanArea()
   }
   Serial.print("\n__________________________________________________________________________");
 }
-
 /*
  * Attivazione del BLE e di tutti i servizi annessi
  */
