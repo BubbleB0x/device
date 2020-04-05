@@ -1,4 +1,17 @@
 # BUBBLEBOX DEVICE #
+
+## INDICE ##
+_________________________________________________________________________________________
+1. Descrizione
+2. Moduli e dispositivi utilizzati
+3. inizializzazione
+4. Directory Tree
+5. Firmware Schede
+6. Consumi, costi e caratteristiche
+
+______________________________________________________________________________________________
+
+## Descrizione ##
 ________________________________________________________________________________________________
 
 Sistema di rilevamento di prossimità per prevenire e rilevare l’espansione del COVID-19, 
@@ -14,7 +27,6 @@ il nostro fornisce un servizio funzionante in ogni luogo e offline, perché la r
 prima in locale poi, quando disponibile, viene inoltrata online.
 
 ----------------------------------------------------------------------------------------------------
-
 
 ## Moduli e dispositivi utilizzati (singolo device)##
 ___________________________________________________________________________________________________
