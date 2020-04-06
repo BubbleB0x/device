@@ -1,8 +1,27 @@
+/*
+ * --------------------------BUBBLEBOX ver. 1.0--------------------------------------
+ * 
+ * Device RF-NANO
+ * 
+ * Pietro Rignanese & Andrea Polenta 2020
+ * 
+ * UNIVPM
+ * 
+ * prof: Aldo Franco Dragoni
+ * 
+ */
+
+// Librerie per la gestione del modulo wirless
 #include <SPI.h>
 #include "RF24.h"
 
+// Librerie per lo sleep&wake
+#include "LowPower.h"
+
+// Segnale di accensione dell'ESP32
 const int AccensioneBubbleBox = 4;
 
+// Settaggio modulo radio
 RF24 radio(10, 9); //CE - CSN
 const uint64_t pipe = 0xE8E8F0F0E1LL;
 
@@ -18,7 +37,13 @@ typedef struct package Package;
 Package dataRicev;
 Package dataTransmit;
 //--------------------------------------------------------------
+
+// Tempo di accensione del device
+int clockTime;
+
 void setup() {
+  clockTime = 0;
+  
   pinMode(AccensioneBubbleBox, OUTPUT);
   Serial.begin(115200);
   delay(1000);
@@ -30,11 +55,13 @@ void setup() {
   radio.openReadingPipe(1, pipe);
   radio.startListening();
   radio.powerDown();
-
 }
 
 void loop() 
 {
+  ++clockTime;
+  sleepWake();
+  
   ricezione();
   delay(500);
   radio.stopListening();
@@ -48,6 +75,7 @@ void ricezione()
     while (radio.available()){
       radio.read(&dataRicev, sizeof(dataRicev));
     }
+    clockTime = 0;
     digitalWrite(AccensioneBubbleBox, HIGH);
     Serial.println("________________RICEZIONE__________________ ");
     Serial.println("Package: ");
@@ -77,4 +105,16 @@ void trasmissione()
   radio.write(&dataTransmit, sizeof(dataTransmit));
   radio.openReadingPipe(1, pipe);
   radio.startListening();
+}
+
+//--------------------SLEEP & WAKE  MODULO----------------------
+void sleepWake()
+{
+  // Quando il modulo non ha trovato alcun dispositivo nelle vicinanze, si spegne per 4 secondi e poi riparte
+  // Appena trova un device nelle vicinanze comincia a trasmettere senza mai fermarsi e tiene acceso l'ESP32
+  if (clockTime > 15)
+  {
+    clockTime = clockTime - 1;
+    LowPower.powerDown(SLEEP_4S, ADC_OFF, BOD_OFF); 
+  }
 }
