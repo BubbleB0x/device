@@ -55,9 +55,8 @@ void loop()
   disconnectedDeviceBLE();
 }
 
-/*
- * Scansione area per il ritrovamento di altri device BLE
- */
+//----------------------------------ESP32 BLE-----------------------------------------
+//------------------------------------------------------------------------------------
 void scanArea()
 {
   Serial.print("\n#############################################################");
@@ -123,7 +122,7 @@ void enableBLE()
   MyMAC = ADD.toString().c_str();
   Serial.print("\n\nMy Address:");
   Serial.print(MyMAC);
-  Serial.print("\n------------------------------------------------");
+  Serial.print("\n----------------------------------------------");
 }
 
 // Disconnette i dispositivi bluetooth che si connettono all'ESP-32

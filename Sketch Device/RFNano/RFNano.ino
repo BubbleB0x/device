@@ -38,6 +38,7 @@ Package dataRicev;
 Package dataTransmit;
 //--------------------------------------------------------------
 
+
 // Tempo di accensione del device
 int clockTime;
 
@@ -107,7 +108,7 @@ void trasmissione()
   radio.startListening();
 }
 
-//--------------------SLEEP & WAKE  MODULO----------------------
+//----------------------SLEEP & WAKE  MODULO----------------------
 void sleepWake()
 {
   // Quando il modulo non ha trovato alcun dispositivo nelle vicinanze, si spegne per 4 secondi e poi riparte
