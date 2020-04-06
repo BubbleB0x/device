@@ -59,6 +59,7 @@ const int RF_Nano = 25;
 
 // Bottone che cambia la schermata del sisplay OLED
 const int statoDisplay = 14;
+const int clockChange = 12;
 int numeroDisplay = 0;
 
 void setup() 
@@ -69,6 +70,7 @@ void setup()
   
   numeroDisplay = 0;
   pinMode(statoDisplay, INPUT);
+  pinMode(clockChange, INPUT);
   display.init();
   display.flipScreenVertically();
   
@@ -270,6 +272,55 @@ void accendiDisplay()
     display.drawString(64, 50, "PERSONE INCONTRATE");
     display.display();
     break; 
+
+    case 2:
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.setFont(ArialMT_Plain_16);
+    display.drawCircle(64, 20, 30);
+    display.drawString(64, 20, "CLOCK");
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "SETTAGGIO OROLOGIO");
+    display.display();
+    break; 
+
+    case 3:
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.setFont(ArialMT_Plain_16);
+    display.drawCircle(64, 20, 30);
+    display.drawString(64, 20, "DATA");
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "SETTAGGIO DATA");
+    display.display();
+    break; 
+    break;
+
+    case 5:
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.setFont(ArialMT_Plain_24);
+    display.drawRect(25, 15, 80, 35);
+    display.drawString(64, 20, "00:00");
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "SETTAGGIO ORA");
+    display.display();
+    break; 
+
+    case 6:
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.setFont(ArialMT_Plain_24);
+    display.drawRect(25, 15, 120, 35);
+    display.drawString(64, 20, "01-01-2000");
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "SETTAGGIO DATA");
+    display.display();
+    break; 
   }
 }
 
@@ -281,11 +332,21 @@ void spegniDisplay()
 
 void controlloCambioDisplay()
 {
+  if(digitalRead(clockChange) == HIGH && numeroDisplay == 2)
+  {
+    ControlTimeWake = 0;
+    numeroDisplay = 5;
+  }
+  if(digitalRead(clockChange) == HIGH && numeroDisplay == 3)
+  {
+    ControlTimeWake = 0;
+    numeroDisplay = 6;
+  }
   if(digitalRead(statoDisplay) == HIGH)
   {
     ControlTimeWake = 0;
     ++numeroDisplay;  
-    if(numeroDisplay > 1)
+    if(numeroDisplay > 3)
     {
       numeroDisplay = 0;  
     }
