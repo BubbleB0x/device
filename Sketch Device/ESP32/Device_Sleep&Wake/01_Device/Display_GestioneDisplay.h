@@ -33,8 +33,9 @@ void accendiDisplay()
     display.setFont(ArialMT_Plain_10);
     display.drawString(64, 50, "BUBBLE BOX");
     display.display();
-    delay(2000);
+    delay(4000);
     ++numeroDisplay;
+    ControlTimeWake = 14;
     break;
     
     case 1:
@@ -74,6 +75,16 @@ void accendiDisplay()
     display.drawXbm(34, 14, 60, 36, WiFi_Logo_bits);
     display.setFont(ArialMT_Plain_10);
     display.drawString(64, 50, "CONNESSIONE WPS");
+    display.display();
+    break;
+
+    case 4:
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.drawXbm(42, 2, 50, 50, Wave2_Logo_bits);
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "ABILITA WPS");
     display.display();
     break;
   }
