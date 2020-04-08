@@ -77,6 +77,23 @@ void accendiDisplay()
     display.drawString(64, 50, "CONNESSIONE BLT");
     display.display();
     break;
+
+    case 4:
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.drawXbm(40, 2, 50, 50, BLTSend_Logo_bits);
+    display.setFont(ArialMT_Plain_10);
+    if(bubbleStation)
+    {
+      display.drawString(64, 50, "INVIO DATI...");
+    }
+    else
+    {
+      display.drawString(64, 50, "CONNESSIONE...");
+    }
+    display.display();
+    break;
   }
 }
 
@@ -89,6 +106,8 @@ void spegniDisplay()
 
 void IRAM_ATTR controlloCambioDisplay()
 {
+  bubbleStation = false;
+  statoBLT = false;
   ++numeroDisplay;
   ControlTimeWake = 0; 
   if(numeroDisplay > 3)

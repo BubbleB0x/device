@@ -16,17 +16,21 @@
 BLECharacteristic *pCharacteristic;
 BLEServer *pServer;
 BLEService *pService;
+BLEScan* pBLEScan;
+
+String RitornoMAC = "";
 
 /*
  * Scansione area per il ritrovamento di altri device BLE
  */
 String scanArea()
 {
+  RitornoMAC = "";
   Serial.print("\n#############################################################");
   Serial.print("\n###### My Address MAC BLE: ");
   Serial.print(MyMAC);
   Serial.print("\n#############################################################");
-  BLEScan* pBLEScan = BLEDevice::getScan();
+  pBLEScan = BLEDevice::getScan();
   pBLEScan->setActiveScan(true);  
   // Attivo la scansione BLE ogni secondo
   BLEScanResults results = pBLEScan->start(1); 
@@ -61,11 +65,14 @@ String scanArea()
       scriviContatto(MAC);
       Serial.println("\n\n------------------------CONSIDERA IL SEGNALE----------------------------");
       Serial.println("\n----------------------------CONTATTO AVVENUTO!----------------------------");
-      return Name + "|" + MAC;
+    }
+    if(Name == "BubbleStation")
+    {
+      RitornoMAC = Name + "|" + MAC;
     }
   }
   Serial.print("\n__________________________________________________________________________");
-  return "";
+  return RitornoMAC;
 }
 /*
  * Attivazione del BLE e di tutti i servizi annessi

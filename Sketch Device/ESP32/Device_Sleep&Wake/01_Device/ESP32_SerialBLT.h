@@ -17,12 +17,13 @@ BluetoothSerial ESP_BT;
     Serial.println("--------- INVIO DATI BLT --->");
     ControlTimeWake = 0;
     numeroDisplay = 4;
-    connessioneSerialBLT = true;
+    statoBLT = true;
   }
 }
 
 void sendDataBLT()
 {
+  Device = "";
   Device = scanArea();
   Serial.println(Device);
   if(Device != "")
@@ -33,10 +34,10 @@ void sendDataBLT()
     Serial.println(Device);
     if(Device == "BubbleStation")
     {
-      // bubbleStation = true;
+      bubbleStation = true;
       Serial.println("STATION TROVATA----INIZIO COMUNICAZIONE!");
       Serial.println(MACDevice);
-      ESP_BT.begin("BubbleBox_Device");
+      /*ESP_BT.begin("BubbleBox_Device");
       while(true)
       {
         Serial.println("Bluetooth Device is Ready to Pair");
@@ -51,7 +52,7 @@ void sendDataBLT()
           }
         }
         delay(500);
-      }
+      }*/
     }
   }
 }

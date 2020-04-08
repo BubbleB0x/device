@@ -36,8 +36,9 @@ const int statoDisplay = 14;          // Bottone per cambiare il display --> 4 t
 int numeroDisplay = 0;                // Numero del display corrispondente
 
 //------- Caratteristiche Connessione BLT Seriale ------------------------------------
-const int connBLT = 12;               // Bottone per la connessione BLT seriale
-bool connessioneSerialBLT = false;
+const int connBLT = 26;               // Bottone per la connessione BLT seriale
+bool statoBLT = false;
+bool bubbleStation = false;
 
 //------- Librerie realizzate "AD HOC" per la gestione dell'intero programma---------------------------------
 #include "Display_IconeDisplay.h"    // Libreria per la gestione delle icone del display 
@@ -62,6 +63,11 @@ void setup()
   display.flipScreenVertically();
   //---------------------------------------------------------------------------------------
 
+  // ------------ Settaggio bottone Interrupt per cambiare il display---------------------
+  pinMode(connBLT, INPUT_PULLUP);
+  attachInterrupt(connBLT, connessioneBLT, HIGH);
+  //---------------------------------------------------------------------------------------
+
   //------------ Settaggio INPUT proveniente dall'RFNano per i dispositivi nei dintorni----
   pinMode(RF_Nano, INPUT);
   ControlTimeWake = 0;              // Time clock del programma (per tenere acceso lo schermo) settato a zero(0)
@@ -74,27 +80,35 @@ void setup()
 //-------------------------- LOOP ----------------------------------------------------------
 void loop() 
 {
-  ++ControlTimeWake;                // Tempo di accensione del display va avanti di +1 ad ogni inizio loop
-  
-  accendiDisplay();                 // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone
-  
-  scanArea();                       // Scansione area per trovare i device con BLE nelle vicinanze
-  
-  disconnectedDeviceBLE();          // Disconnesione dei dispositivi che si connettono --> Mantenere il device BLE esp32 sempre disponibile alla ricerca da parte di tutti gli altri device
-
-  // Controllo per accendere o tener acceso il device in base a quanto tempo rimane in attesa o se non riceve nessun segnale dall'RFNANO
-  // Controllo tempo di accensione e RF-NANO non trova device nei dintorni
-  if(ControlTimeWake == 15 && digitalRead(RF_Nano) == LOW)
+  if(statoBLT)
   {
-    spegniDisplay();
-    setSleepWake();
+    accendiDisplay();
+    sendDataBLT();
   }
   else
   {
-    // Il tempo va avanti ma l'RF-NANO continua a trovare dispositivi nelle vicinanze
-    if(digitalRead(RF_Nano) == HIGH)
+    ++ControlTimeWake;                // Tempo di accensione del display va avanti di +1 ad ogni inizio loop
+  
+    accendiDisplay();                 // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone
+    
+    scanArea();                       // Scansione area per trovare i device con BLE nelle vicinanze
+    
+    disconnectedDeviceBLE();          // Disconnesione dei dispositivi che si connettono --> Mantenere il device BLE esp32 sempre disponibile alla ricerca da parte di tutti gli altri device
+  
+    // Controllo per accendere o tener acceso il device in base a quanto tempo rimane in attesa o se non riceve nessun segnale dall'RFNANO
+    // Controllo tempo di accensione e RF-NANO non trova device nei dintorni
+    if(ControlTimeWake == 15 && digitalRead(RF_Nano) == LOW)
     {
-      ControlTimeWake = 0;
+      spegniDisplay();
+      setSleepWake();
+    }
+    else
+    {
+      // Il tempo va avanti ma l'RF-NANO continua a trovare dispositivi nelle vicinanze
+      if(digitalRead(RF_Nano) == HIGH)
+      {
+        ControlTimeWake = 0;
+      }
     }
   }
 }
