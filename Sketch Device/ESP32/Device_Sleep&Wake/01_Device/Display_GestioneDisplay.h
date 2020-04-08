@@ -72,19 +72,9 @@ void accendiDisplay()
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
-    display.drawXbm(34, 14, 60, 36, WiFi_Logo_bits);
+    display.drawXbm(40, 2, 50, 50, BLT_Logo_bits);
     display.setFont(ArialMT_Plain_10);
-    display.drawString(64, 50, "CONNESSIONE WPS");
-    display.display();
-    break;
-
-    case 4:
-    display.displayOn();
-    display.clear();
-    display.setTextAlignment(TEXT_ALIGN_CENTER);
-    display.drawXbm(42, 2, 50, 50, Wave2_Logo_bits);
-    display.setFont(ArialMT_Plain_10);
-    display.drawString(64, 50, "ABILITA WPS");
+    display.drawString(64, 50, "CONNESSIONE BLT");
     display.display();
     break;
   }

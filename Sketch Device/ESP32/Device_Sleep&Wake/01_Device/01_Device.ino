@@ -35,10 +35,9 @@ const int RF_Nano = 25;               // Segnale di Controllo "RITROVAMENTO" dev
 const int statoDisplay = 14;          // Bottone per cambiare il display --> 4 tipologie di display
 int numeroDisplay = 0;                // Numero del display corrispondente
 
-//------ Connessione WPS -------------------------------------------------------
-const int connWPS = 12;
-bool connessioneWIFI = false;
-bool connessioneWPS = false;
+//------- Caratteristiche Connessione BLT Seriale ------------------------------------
+const int connBLT = 12;               // Bottone per la connessione BLT seriale
+bool connessioneSerialBLT = false;
 
 //------- Librerie realizzate "AD HOC" per la gestione dell'intero programma---------------------------------
 #include "Display_IconeDisplay.h"    // Libreria per la gestione delle icone del display 
@@ -46,7 +45,7 @@ bool connessioneWPS = false;
 #include "SD_GestioneSDCard.h"       // Libreria per la gestione dell'SD Card
 #include "ESP32_BLEDevice.h"         // Libreria per il device Bluetooth ESP32
 #include "ESP32_SleepWake.h"         // Libreria per lo Sleep&Wake ESP32
-#include "ESP32_WPS.h"               // Libreria per la connessione WPS al WIFI --> DA IMPLEMENTARE! (Problemi di spazio di memoria)
+#include "ESP32_SerialBLT.h"         // Libreria per la connessione Bluetooth Seriale
 
 
 //------------------------- SETUP ----------------------------------------------------
@@ -61,11 +60,6 @@ void setup()
   attachInterrupt(statoDisplay, controlloCambioDisplay, HIGH);
   display.init();
   display.flipScreenVertically();
-  //---------------------------------------------------------------------------------------
-
-  // ------------ Settaggio bottone Interrupt per WPS ---------------------
-  pinMode(connWPS, INPUT_PULLUP);
-  attachInterrupt(connWPS, connessioneWPSWIFI, HIGH);
   //---------------------------------------------------------------------------------------
 
   //------------ Settaggio INPUT proveniente dall'RFNano per i dispositivi nei dintorni----

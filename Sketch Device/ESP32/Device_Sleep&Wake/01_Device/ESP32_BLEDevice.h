@@ -6,6 +6,8 @@
 #include <BLEDevice.h>
 #include <BLEScan.h>
 #include <BLEUtils.h>
+#include <Arduino.h>
+#include <BLESecurity.h>
 
 // Caratteristiche rete BLE del decvice
 #define SERVICE_UUID "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
@@ -18,7 +20,7 @@ BLEService *pService;
 /*
  * Scansione area per il ritrovamento di altri device BLE
  */
-void scanArea()
+String scanArea()
 {
   Serial.print("\n#############################################################");
   Serial.print("\n###### My Address MAC BLE: ");
@@ -59,9 +61,11 @@ void scanArea()
       scriviContatto(MAC);
       Serial.println("\n\n------------------------CONSIDERA IL SEGNALE----------------------------");
       Serial.println("\n----------------------------CONTATTO AVVENUTO!----------------------------");
+      return Name + "|" + MAC;
     }
   }
   Serial.print("\n__________________________________________________________________________");
+  return "";
 }
 /*
  * Attivazione del BLE e di tutti i servizi annessi
