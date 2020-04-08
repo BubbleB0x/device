@@ -37,8 +37,9 @@ void sendDataBLT()
       bubbleStation = true;
       Serial.println("STATION TROVATA----INIZIO COMUNICAZIONE!");
       Serial.println(MACDevice);
-      /*ESP_BT.begin("BubbleBox_Device");
-      while(true)
+      ESP_BT.begin("BubbleBox_Device");
+      accendiDisplay();
+      while(bubbleStation)
       {
         Serial.println("Bluetooth Device is Ready to Pair");
         if (ESP_BT.available()) //Check if we receive anything from Bluetooth
@@ -46,13 +47,19 @@ void sendDataBLT()
           int incoming = ESP_BT.read(); //Read what we recevive
           Serial.print("Received:"); 
           Serial.println(incoming);
-          if(incoming == 49)
+          ESP_BT.println("Digita 2 per chiudere tutto!");
+          if(incoming == 50)
           {
-            ESP_BT.println("LED turned ON");
+            ESP_BT.println("Chiusura...");
+            bubbleStation = false;
           }
         }
         delay(500);
-      }*/
+      }
+      ESP_BT.end();
+      ControlTimeWake = 14;
+      numeroDisplay = 1;
+      statoBLT = false;
     }
   }
 }

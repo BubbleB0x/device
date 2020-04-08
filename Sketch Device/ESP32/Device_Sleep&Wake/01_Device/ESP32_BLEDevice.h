@@ -57,6 +57,11 @@ String scanArea()
     Manufacturer = device.getManufacturerData().c_str();
     Serial.print(" | Manufacturer Device: ");
     Serial.print(Manufacturer);
+    if(device.haveServiceUUID())
+    {
+      Serial.print(" | UUID:");
+      Serial.print(device.getServiceUUID().toString().c_str());
+    }
 
     // Controllo del probabile contatto con un'altra persona che possiede un altro BubbleBox
     if(Name == "BubbleBox" && Rssi_device > -75)
