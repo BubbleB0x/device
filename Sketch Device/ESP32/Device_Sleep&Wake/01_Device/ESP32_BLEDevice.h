@@ -10,7 +10,9 @@
 #include <BLESecurity.h>
 
 // Caratteristiche rete BLE del decvice
-#define SERVICE_UUID "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+//-- #define SERVICE_UUID "4FAFC201-1FB5-459E-8FCC-C5C9C331914B"      //Service UUID BUBBLESTATION
+#define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+#define SERVICE_UUID "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"           // Service UUID BUBBLEBOX
 #define CHARACTERISTIC_UUID_RX "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 #define CHARACTERISTIC_UUID_TX "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 BLECharacteristic *pCharacteristic;
@@ -19,6 +21,8 @@ BLEService *pService;
 BLEScan* pBLEScan;
 
 String RitornoMAC = "";
+String BubbleBox_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
+String BubbleStation_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 
 /*
  * Scansione area per il ritrovamento di altri device BLE
@@ -59,22 +63,25 @@ String scanArea()
     Serial.print(Manufacturer);
     if(device.haveServiceUUID())
     {
+      UUID = device.getServiceUUID().toString().c_str();
       Serial.print(" | UUID:");
-      Serial.print(device.getServiceUUID().toString().c_str());
+      Serial.print(UUID);
     }
 
     // Controllo del probabile contatto con un'altra persona che possiede un altro BubbleBox
-    if(Name == "BubbleBox" && Rssi_device > -75)
+    if(UUID == BubbleBox_UUID && Rssi_device > -75)
     {
       BubbleBoxTrovato = true;
       scriviContatto(MAC);
       Serial.println("\n\n------------------------CONSIDERA IL SEGNALE----------------------------");
       Serial.println("\n----------------------------CONTATTO AVVENUTO!----------------------------");
     }
-    if(Name == "BubbleStation")
+    if(UUID == BubbleStation_UUID)
     {
-      RitornoMAC = Name + "|" + MAC;
+      Serial.println("\n-------------------------BUBBLESTATION TROVATA---------------------------");
+      RitornoMAC = MAC;
     }
+    UUID = "";
   }
   Serial.print("\n__________________________________________________________________________");
   return RitornoMAC;
@@ -89,13 +96,16 @@ void enableBLE()
   pServer = BLEDevice::createServer();
   pService = pServer->createService(SERVICE_UUID);
   pCharacteristic = pService->createCharacteristic(
-                      CHARACTERISTIC_UUID_TX,
-                      BLECharacteristic::PROPERTY_NOTIFY
+                      CHARACTERISTIC_UUID,
+                      BLECharacteristic::PROPERTY_READ |
+                      BLECharacteristic::PROPERTY_WRITE
                       );
-  pAdvertisementData.setName("BubbleBox");
-  pAdvertisementData.setManufacturerData("BubbleBox_Device");
+  pCharacteristic->setValue("I'm BubbleBox");
   pService->start();
-  pServer->getAdvertising()->start();
+  BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
+  pAdvertising->addServiceUUID(SERVICE_UUID);
+  pAdvertising->setScanResponse(true);
+  BLEDevice::startAdvertising();
   BLEAddress  ADD = BLEDevice::getAddress();
   MyMAC = ADD.toString().c_str();
   Serial.print("\n\nMy Address:");

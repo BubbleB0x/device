@@ -18,6 +18,7 @@ String MAC;
 String Name;
 String Manufacturer;
 int Rssi_device = 0;
+String UUID;
 //------------------------------------------------------------------------------
 
 //--- MAC Address BLE di questo dispositivo-------------------------------------
