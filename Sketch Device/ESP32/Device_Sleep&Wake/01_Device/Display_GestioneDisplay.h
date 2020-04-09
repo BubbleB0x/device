@@ -21,7 +21,7 @@ void displayBubbleBoxContatto()
 }
 
 //-------------------- Accensione del display e visualizzazione della data/ora e altre schermate in base alla variabile numeroDisplay
-void accendiDisplay()
+void accendiDisplay(String Data, String Ora)
 {
   if(bootCount > 0 && numeroDisplay == 0)               // La schermata di accensione non deve essere più impostata una volta che il device è entrato in funzione
   {
@@ -34,9 +34,9 @@ void accendiDisplay()
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
-    display.drawXbm(42, 2, 50, 50, Logo_Init_bits);
+    display.drawXbm(18, 2, 95, 50, LogoBubble_bits);
     display.setFont(ArialMT_Plain_10);
-    display.drawString(64, 50, "BUBBLE BOX");
+    // display.drawString(64, 50, "BUBBLE BOX");
     display.display();
     delay(4000);
     ++numeroDisplay;
@@ -51,9 +51,9 @@ void accendiDisplay()
     display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.setFont(ArialMT_Plain_24);
     display.drawRect(25, 15, 80, 35);
-    display.drawString(64, 20, "00:00");
+    display.drawString(64, 20, Ora);
     display.setFont(ArialMT_Plain_10);
-    display.drawString(64, 50, "01-01-2000");
+    display.drawString(64, 50, Data);
     display.display();
     if(BubbleBoxTrovato)
     {

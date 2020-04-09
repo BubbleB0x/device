@@ -49,6 +49,7 @@ bool smartphoneConnect = false;       // Connessione Bluetooth Serial tramite sm
 #include "ESP32_BLEDevice.h"         // Libreria per il device Bluetooth ESP32
 #include "ESP32_SleepWake.h"         // Libreria per lo Sleep&Wake ESP32
 #include "ESP32_SerialBLT.h"         // Libreria per la connessione Bluetooth Seriale
+#include "RTC_Clock.h"               // Libreria per ora e data
 
 
 //------------------------- SETUP ----------------------------------------------------
@@ -82,10 +83,11 @@ void setup()
 //-------------------------- LOOP ----------------------------------------------------------
 void loop() 
 {
+  
   //---------- Controllo stato connessione Bluetooth Seriale, per connettere smartphone o bubblestation --> Disabilito tutto il resto del device 
   if(statoBLT)
   {
-    accendiDisplay();
+    accendiDisplay("", "");
     if(smartphoneConnect)
     {
       // ------ Connessione e invio dati allo smartphone
@@ -101,7 +103,7 @@ void loop()
   {     
     ++ControlTimeWake;                // Tempo di accensione del display va avanti di +1 ad ogni inizio loop
   
-    accendiDisplay();                 // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone
+    accendiDisplay(getData(), getOra());                 // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone
     
     scanArea();                       // Scansione area per trovare i device con BLE nelle vicinanze
     
