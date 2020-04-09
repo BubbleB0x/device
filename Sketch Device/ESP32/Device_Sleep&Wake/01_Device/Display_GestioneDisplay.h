@@ -116,19 +116,32 @@ void accendiDisplay()
     display.drawString(64, 40, "[BubbleBox_Device]");
     display.display();
     break;
+
+    case 7:
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.drawXbm(40, 2, 50, 50, SmartphoneSend_Logo_bits);
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "INVIO DATI...");
+    display.display();
+    break;
   }
 }
 
 // Spegnimento diplay
 void spegniDisplay()
 {
+  smartphoneConnect = false;
+  bubbleStation = false;
+  statoBLT = false;
   numeroDisplay = 1;
   display.displayOff();
 }
 
 void IRAM_ATTR controlloCambioDisplay()
 {
-  smartphoneConnect = true;
+  smartphoneConnect = false;
   bubbleStation = false;
   statoBLT = false;
   ++numeroDisplay;

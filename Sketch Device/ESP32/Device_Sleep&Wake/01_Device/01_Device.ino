@@ -22,10 +22,10 @@ String UUID;
 //------------------------------------------------------------------------------
 
 //--- MAC Address BLE di questo dispositivo-------------------------------------
-String MyMAC;
+String MyMAC;                         // Mio MAC Address BLE device ESP32
 
 //---Variabile sul ritrovamento di altri device BUBBLEBOX-----------------------
-bool BubbleBoxTrovato = false;
+bool BubbleBoxTrovato = false;        // Ritrovamento Device BubbleBox in zona
 
 //---------- Caratteristiche Sleep&Wake-----------------------------------------
 RTC_DATA_ATTR int bootCount = 0;      // Conteggio boot device
@@ -38,9 +38,9 @@ int numeroDisplay = 0;                // Numero del display corrispondente
 
 //------- Caratteristiche Connessione BLT Seriale ------------------------------------
 const int connBLT = 26;               // Bottone per la connessione BLT seriale
-bool statoBLT = false;
-bool bubbleStation = false;
-bool smartphoneConnect = false;
+bool statoBLT = false;                // Bluetooth seriale attivato/disattivato
+bool bubbleStation = false;           // BubbleStation rilevata
+bool smartphoneConnect = false;       // Connessione Bluetooth Serial tramite smartphone attivata/disattivata
 
 //------- Librerie realizzate "AD HOC" per la gestione dell'intero programma---------------------------------
 #include "Display_IconeDisplay.h"    // Libreria per la gestione delle icone del display 
@@ -82,15 +82,18 @@ void setup()
 //-------------------------- LOOP ----------------------------------------------------------
 void loop() 
 {
+  //---------- Controllo stato connessione Bluetooth Seriale, per connettere smartphone o bubblestation --> Disabilito tutto il resto del device 
   if(statoBLT)
   {
     accendiDisplay();
     if(smartphoneConnect)
     {
-      // Azione da seguire per connettere SmartPhone --> Da implementare!
+      // ------ Connessione e invio dati allo smartphone
+      sendDataSmartphone();
     }
     else
     {
+      //------ Connessione e invio dati alla BubbleStation --->
       sendDataBLT();
     }
   }

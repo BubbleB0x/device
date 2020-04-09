@@ -18,15 +18,52 @@ void IRAM_ATTR connessioneBLT()
     numeroDisplay = 5;
     statoBLT = true;
   }
-  if(numeroDisplay == 4)
+  else
   {
-    Serial.println();
-    Serial.println("--------- INVIO DATI SMARTPHONE --->");
-    ControlTimeWake = 0;
-    numeroDisplay = 6;
-    statoBLT = true;
-    smartphoneConnect = true;
+    if(numeroDisplay == 4)
+    {
+      Serial.println();
+      Serial.println("--------- INVIO DATI SMARTPHONE --->");
+      ControlTimeWake = 0;
+      numeroDisplay = 6;
+      statoBLT = true;
+      smartphoneConnect = true;
+    } 
   }
+}
+
+void closeConnectionSerial()
+{
+  ESP_BT.end();
+  ControlTimeWake = 14;
+  numeroDisplay = 1;
+  statoBLT = false;
+  bubbleStation = false;
+  smartphoneConnect = false;
+}
+
+void sendDataSmartphone()
+{
+  Serial.println("Connessione smartphone in corso...");
+  ESP_BT.begin("BubbleBox_Device");
+  while(smartphoneConnect)
+  {
+    Serial.println("Bluetooth Device is Ready Smartphone...");
+    if (ESP_BT.available()) 
+    {
+      int incoming = ESP_BT.read(); //Read what we recevive
+      Serial.print("Received:"); 
+      Serial.println(incoming);
+      ESP_BT.println("00:11:22:33:44|11:22:33:11:22|2020-12-12|12:20");
+      if(incoming == 50)
+      {
+        ESP_BT.println("Chiusura...");
+        smartphoneConnect = false;
+      }
+    }
+    delay(500);
+  }
+  closeConnectionSerial();
 }
 
 void sendDataBLT()
@@ -45,7 +82,7 @@ void sendDataBLT()
     while(bubbleStation)
     {
       Serial.println("Bluetooth Device is Ready to Pair");
-      if (ESP_BT.available()) //Check if we receive anything from Bluetooth
+      if (ESP_BT.available()) 
       {
         int incoming = ESP_BT.read(); //Read what we recevive
         Serial.print("Received:"); 
@@ -59,9 +96,6 @@ void sendDataBLT()
       }
       delay(500);
     }
-    ESP_BT.end();
-    ControlTimeWake = 14;
-    numeroDisplay = 1;
-    statoBLT = false;
+    closeConnectionSerial();
   }
 }
