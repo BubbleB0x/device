@@ -82,6 +82,15 @@ void accendiDisplay()
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.drawXbm(50, 2, 32, 60, Smartphone_Logo_bits);
+    display.setFont(ArialMT_Plain_10);
+    display.display();
+    break;
+
+    case 5:
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.drawXbm(40, 2, 50, 50, BLTSend_Logo_bits);
     display.setFont(ArialMT_Plain_10);
     if(bubbleStation)
@@ -92,6 +101,19 @@ void accendiDisplay()
     {
       display.drawString(64, 50, "CONNESSIONE...");
     }
+    display.display();
+    break;
+
+    case 6:
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 0, "Connetti Smartphone");
+    display.drawString(64, 12, "Tramite Bluetooth");
+    display.drawString(64, 25, "NOME DEVICE:");
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 40, "[BubbleBox_Device]");
     display.display();
     break;
   }
@@ -106,11 +128,12 @@ void spegniDisplay()
 
 void IRAM_ATTR controlloCambioDisplay()
 {
+  smartphoneConnect = true;
   bubbleStation = false;
   statoBLT = false;
   ++numeroDisplay;
   ControlTimeWake = 0; 
-  if(numeroDisplay > 3)
+  if(numeroDisplay > 4)
    {
      numeroDisplay = 1;  
    }

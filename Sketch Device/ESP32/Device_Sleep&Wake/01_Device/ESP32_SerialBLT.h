@@ -15,8 +15,17 @@ void IRAM_ATTR connessioneBLT()
     Serial.println();
     Serial.println("--------- INVIO DATI BLT --->");
     ControlTimeWake = 0;
-    numeroDisplay = 4;
+    numeroDisplay = 5;
     statoBLT = true;
+  }
+  if(numeroDisplay == 4)
+  {
+    Serial.println();
+    Serial.println("--------- INVIO DATI SMARTPHONE --->");
+    ControlTimeWake = 0;
+    numeroDisplay = 6;
+    statoBLT = true;
+    smartphoneConnect = true;
   }
 }
 

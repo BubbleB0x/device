@@ -40,6 +40,7 @@ int numeroDisplay = 0;                // Numero del display corrispondente
 const int connBLT = 26;               // Bottone per la connessione BLT seriale
 bool statoBLT = false;
 bool bubbleStation = false;
+bool smartphoneConnect = false;
 
 //------- Librerie realizzate "AD HOC" per la gestione dell'intero programma---------------------------------
 #include "Display_IconeDisplay.h"    // Libreria per la gestione delle icone del display 
@@ -84,7 +85,14 @@ void loop()
   if(statoBLT)
   {
     accendiDisplay();
-    sendDataBLT();
+    if(smartphoneConnect)
+    {
+      // Azione da seguire per connettere SmartPhone --> Da implementare!
+    }
+    else
+    {
+      sendDataBLT();
+    }
   }
   else
   {
