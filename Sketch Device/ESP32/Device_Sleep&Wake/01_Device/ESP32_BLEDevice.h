@@ -1,6 +1,8 @@
 //--------------------------BLE ESP32--------------------------------------------
 //--------------------------------------------------------------------------------
-
+/*
+ * Library ESP32: https://github.com/espressif/arduino-esp32/tree/master/libraries/BLE
+ */
 // Librerie ESP32 BLE 
 #include <BLEAdvertisedDevice.h>
 #include <BLEDevice.h>
@@ -21,11 +23,11 @@ BLEService *pService;
 BLEScan* pBLEScan;
 
 String RitornoMAC = "";
-String BubbleBox_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
-String BubbleStation_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
+String BubbleBox_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";      // Service UUID BubbleBox da controllare per verificare un contatto
+String BubbleStation_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";  // Service UUID BubbleStation da controllare quando bisogna connettersi per lo scambio di dati
 
 /*
- * Scansione area per il ritrovamento di altri device BLE
+ *--------------- Scansione area per il ritrovamento di altri device BLE ----------------------
  */
 String scanArea()
 {
@@ -87,13 +89,13 @@ String scanArea()
   return RitornoMAC;
 }
 /*
- * Attivazione del BLE e di tutti i servizi annessi
+ *---------------- Attivazione del BLE e di tutti i servizi annessi ---------------------------
  */
 void enableBLE()
 {
   BLEAdvertisementData pAdvertisementData;
-  BLEDevice::init("BubbleBox"); // Init del BLE e nome device --> BubbleBox
-  pServer = BLEDevice::createServer();
+  BLEDevice::init("BubbleBox");                                 // Init BLE ESP32 con nome del Device --> Scompare alla secomda scansione con ESP32 (Controllare UUID)
+  pServer = BLEDevice::createServer();                          // Creazione Server BLE per la visualizzazioni dei dati manifesto
   pService = pServer->createService(SERVICE_UUID);
   pCharacteristic = pService->createCharacteristic(
                       CHARACTERISTIC_UUID,
@@ -103,17 +105,17 @@ void enableBLE()
   pCharacteristic->setValue("I'm BubbleBox");
   pService->start();
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
-  pAdvertising->addServiceUUID(SERVICE_UUID);
+  pAdvertising->addServiceUUID(SERVICE_UUID);                   // Aggiunta della stringa UUID al servizio --> Variabile da controllare quando bisogna controllare i device per i contatti
   pAdvertising->setScanResponse(true);
   BLEDevice::startAdvertising();
-  BLEAddress  ADD = BLEDevice::getAddress();
+  BLEAddress  ADD = BLEDevice::getAddress();                    // MAC Address del device 
   MyMAC = ADD.toString().c_str();
   Serial.print("\n\nMy Address:");
   Serial.print(MyMAC);
   Serial.print("\n------------------------------------------------");
 }
 
-// Disconnette i dispositivi bluetooth che si connettono all'ESP-32
+//------- Disconnette i dispositivi bluetooth che si connettono all'ESP-32 ----------
 void disconnectedDeviceBLE()
 {
   pServer->disconnect(pServer->getConnId());

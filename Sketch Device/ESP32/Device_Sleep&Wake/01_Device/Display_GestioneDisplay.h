@@ -1,6 +1,11 @@
 //--------------------------DISPLAY SETUP ON/OFF--------------------------------------------------
 //--------------------------------------------------------------------------------
 
+/*
+ * Librerie: https://github.com/ThingPulse/esp8266-oled-ssd1306
+ */
+
+ 
 // Librerie Displey OLED
 #include <Wire.h>               // Only needed for Arduino 1.6.5 and earlier
 #include "SSD1306Wire.h"        // legacy: #include "SSD1306.h"
@@ -15,17 +20,17 @@ void displayBubbleBoxContatto()
   display.display();
 }
 
-// Accensione del display e visualizzazione della data e ora
+//-------------------- Accensione del display e visualizzazione della data/ora e altre schermate in base alla variabile numeroDisplay
 void accendiDisplay()
 {
-  if(bootCount > 0 && numeroDisplay == 0)
+  if(bootCount > 0 && numeroDisplay == 0)               // La schermata di accensione non deve essere più impostata una volta che il device è entrato in funzione
   {
     ++numeroDisplay;
   }
   
-  switch (numeroDisplay)
+  switch (numeroDisplay)                                // Controllo numero di schermata da visualizzare
   {
-    case 0:
+    case 0:                                             // Logo iniziale ----> Solo in accensione
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -38,7 +43,7 @@ void accendiDisplay()
     ControlTimeWake = 14;
     break;
     
-    case 1:
+    case 1:                                               // Schermata principale con data e ora
     display.displayOn();
     display.clear();
     // display.drawXbm(95, 0, 19, 13, Wave_Logo_bits);
@@ -56,7 +61,7 @@ void accendiDisplay()
     }
     break;
 
-    case 2:
+    case 2:                                                // Numero di persone incontrate in giornata
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -68,7 +73,7 @@ void accendiDisplay()
     display.display();
     break; 
 
-    case 3:
+    case 3:                                                 // Connessione ad una Bubble Station nei dintorni
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -78,7 +83,7 @@ void accendiDisplay()
     display.display();
     break;
 
-    case 4:
+    case 4:                                                // Connessione ad uno smartphone per lo scambio dati
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -87,7 +92,7 @@ void accendiDisplay()
     display.display();
     break;
 
-    case 5:
+    case 5:                                                 // Connessione e invio dati BubbleStation
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -104,7 +109,7 @@ void accendiDisplay()
     display.display();
     break;
 
-    case 6:
+    case 6:                                                  // Connessione smartphone e le credenziali di accesso e connessione
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -117,7 +122,7 @@ void accendiDisplay()
     display.display();
     break;
 
-    case 7:
+    case 7:                                                   // Invio dati smartphone --> DA IMPLEMENTARE!
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -129,7 +134,7 @@ void accendiDisplay()
   }
 }
 
-// Spegnimento diplay
+//---------------------------- Spegnimento diplay
 void spegniDisplay()
 {
   smartphoneConnect = false;
@@ -139,6 +144,7 @@ void spegniDisplay()
   display.displayOff();
 }
 
+//---------------- Funzione Interrupt per il cambio dello schermo del displey
 void IRAM_ATTR controlloCambioDisplay()
 {
   smartphoneConnect = false;

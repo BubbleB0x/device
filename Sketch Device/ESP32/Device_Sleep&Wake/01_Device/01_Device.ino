@@ -98,7 +98,7 @@ void loop()
     }
   }
   else
-  {
+  {     
     ++ControlTimeWake;                // Tempo di accensione del display va avanti di +1 ad ogni inizio loop
   
     accendiDisplay();                 // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone

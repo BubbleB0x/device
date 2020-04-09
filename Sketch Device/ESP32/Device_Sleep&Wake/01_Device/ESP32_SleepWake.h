@@ -1,6 +1,12 @@
 //----------------------SLEEP & WAKE ESP32----------------------------------------
 //--------------------------------------------------------------------------------
 
+/*
+ * Libreria presa da internet per il funzionamento dello sleep & wake con ESP32
+ * 
+ * Verificare questo sito per ulteriori dettagli: https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/
+ * 
+ */
 #define BUTTON_PIN_BITMASK 0x8004 // GPIOs 2 and 15
 
 // Settagio dello sleep&wake del device e partenza device

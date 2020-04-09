@@ -1,6 +1,20 @@
 //-----------------------SD CARD DATA STORAGE & SETUP------------------------------------
 //--------------------------------------------------------------------------------
 
+/*
+ *    Connettere Il modulo SD Card all'ESP32
+ *    
+ *    SD CARD   -   ESP32
+ *      VCC           V5
+ *      GND          GND
+ *      MISO        GPIO 19
+ *      MOSI        GPIO 23
+ *      SCK         GPIO 18
+ *      CS          GPIO 5
+ *      
+ *      Libreria contenuta nelle library ufficiali dell'ESP32 ESSPRESSIF: https://github.com/espressif/arduino-esp32/tree/master/libraries/SD
+ */
+ 
 // Librerie Modulo scheda SD per memorizzare i dati
 #include "FS.h"
 #include "SD.h"
