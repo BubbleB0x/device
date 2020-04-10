@@ -11,44 +11,42 @@
  * 
  */
 
-// Librerie per la gestione del modulo wirless
+//-------------- Librerie per la gestione del modulo wirless
 #include <SPI.h>
 #include "RF24.h"
 
-// Librerie per lo sleep&wake
+//-------------- Librerie per lo sleep&wake
 #include "LowPower.h"
 
-// Segnale di accensione dell'ESP32
-const int AccensioneBubbleBox = 4;
+const int AccensioneBubbleBox = 4;                    // Segnale di accensione dell'ESP32
 
-// Settaggio modulo radio
-RF24 radio(10, 9); //CE - CSN
+
+RF24 radio(10, 9);                                    //CE - CSN --> Settaggio modulo radio
 const uint64_t pipe = 0xE8E8F0F0E1LL;
 
 //----------STRUTTURA DATI DA MANDARE E RICEVERE---------------
 struct package 
 {
-  char id[20] = "00:01:11:23"; // MAC Address Device
-  unsigned long timeStamp;
+  char id[20] = "BUBBLEBOX_DEVICE";                   // Nome Device
+  unsigned long timeStamp;                            // Tempo di esecuzione del device
 };
 
-// Strutture dati da ricevere e mandare
+//------- Strutture dati da ricevere e mandare ---------------
 typedef struct package Package;
 Package dataRicev;
 Package dataTransmit;
 //--------------------------------------------------------------
 
-
-// Tempo di accensione del device
-int clockTime;
+int clockTime;                                       // Tempo di accensione del device
 
 void setup() {
-  clockTime = 0;
+  clockTime = 0;                                     // Inizializzazione tempo accensione device a zero
   
   pinMode(AccensioneBubbleBox, OUTPUT);
+  
   Serial.begin(115200);
   delay(1000);
-
+//-------------------------------------------------- Inizializzazione Radio ---------------------------
   radio.begin();
   radio.setChannel(115);
   radio.setPALevel(RF24_PA_MIN);
@@ -57,16 +55,17 @@ void setup() {
   radio.startListening();
   radio.powerDown();
 }
+//--------------------------------------------------------------------------------------------------------
 
 void loop() 
 {
-  ++clockTime;
-  sleepWake();
+  ++clockTime;                                        // Il tempo di veglia si incrementa
+  sleepWake();                                        // Funzione Sleep&Wake
   
-  ricezione();
+  ricezione();                                        // Controllo se è arrivato qualcosa in ricezione
   delay(500);
   radio.stopListening();
-  trasmissione();
+  trasmissione();                                     // Trasmetto informazioni
 }
 
 //--------------RICEZIONE MESSAGGI------------------------
@@ -76,7 +75,11 @@ void ricezione()
     while (radio.available()){
       radio.read(&dataRicev, sizeof(dataRicev));
     }
-    clockTime = 0;
+    if (strcmp (dataRicev.id,"BUBBLEBOX_DEVICE") == 0)
+    {
+      Serial.println("BUBBLE BOX TROVATO!");
+      clockTime = 0;
+    }
     digitalWrite(AccensioneBubbleBox, HIGH);
     Serial.println("________________RICEZIONE__________________ ");
     Serial.println("Package: ");
@@ -108,7 +111,7 @@ void trasmissione()
   radio.startListening();
 }
 
-//----------------------SLEEP & WAKE  MODULO----------------------
+//--------------------SLEEP & WAKE  MODULO----------------------
 void sleepWake()
 {
   // Quando il modulo non ha trovato alcun dispositivo nelle vicinanze, si spegne per 4 secondi e poi riparte
