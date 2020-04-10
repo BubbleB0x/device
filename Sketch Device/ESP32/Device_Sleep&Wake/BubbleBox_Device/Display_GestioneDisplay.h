@@ -21,7 +21,8 @@ void displayBubbleBoxContatto()
 }
 
 //-------------------- Accensione del display e visualizzazione della data/ora e altre schermate in base alla variabile numeroDisplay
-void accendiDisplay(String Data, String Ora, String Temp)
+//--- accendiDisplay(Data da inserire | Ora da inserire | Temperatura da inserire | Numero contatti da inserire)
+void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
 {
   if(bootCount > 0 && numeroDisplay == 0)               // La schermata di accensione non deve essere più impostata una volta che il device è entrato in funzione
   {
@@ -66,7 +67,7 @@ void accendiDisplay(String Data, String Ora, String Temp)
     display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.setFont(ArialMT_Plain_24);
     display.drawCircle(64, 20, 30);
-    display.drawString(64, 20, "10");
+    display.drawString(64, 20, NContatti);
     display.setFont(ArialMT_Plain_10);
     display.drawString(64, 50, "PERSONE INCONTRATE");
     display.display();

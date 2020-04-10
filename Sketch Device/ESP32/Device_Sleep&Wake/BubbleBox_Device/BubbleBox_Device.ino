@@ -73,7 +73,7 @@ void setup()
   pinMode(RF_Nano, INPUT);
   ControlTimeWake = 0;              // Time clock del programma (per tenere acceso lo schermo) settato a zero(0)
   
-  Serial.begin(115200);
+  Serial.begin(115200);             // Inizializzazione monitor seriale per il debug
 
   setSDCard(getDataFile());         // Setto l'SD card --> SD_GestioneSDCard.h
   
@@ -87,27 +87,27 @@ void loop()
   //---------- Controllo stato connessione Bluetooth Seriale, per connettere smartphone o bubblestation --> Disabilito tutto il resto del device 
   if(statoBLT)
   {
-    accendiDisplay("", "", "");
-    if(smartphoneConnect)
+    accendiDisplay("", "", "", "");
+    if(smartphoneConnect)                                                           // Controllo se sta avvenendo una connessione ad uno smartphone
     {
       // ------ Connessione e invio dati allo smartphone
-      sendDataSmartphone();                            // ESP32_SerialBLT.h
+      sendDataSmartphone();                                                         // ESP32_SerialBLT.h
     }
     else
     {
       //------ Connessione e invio dati alla BubbleStation --->
-      sendDataBLT();                                  // ESP32_SerialBLT.h
+      sendDataBLT();                                                                // ESP32_SerialBLT.h
     }
   }
   else
   {     
-    ++ControlTimeWake;                                // Tempo di accensione del display va avanti di +1 ad ogni inizio loop
+    ++ControlTimeWake;                                                              // Tempo di accensione del display va avanti di +1 ad ogni inizio loop
   
-    accendiDisplay(getData(), getOra(), getTemp());   // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone --> Display_GestioneDisplay.h
+    accendiDisplay(getData(), getOra(), getTemp(), countContatti(getDataFile()));   // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone --> Display_GestioneDisplay.h
     
-    scanArea(getOra(), getDataFile());                // Scansione area per trovare i device con BLE nelle vicinanze --> scanArea() --> ESP32_BLEDevice.h
+    scanArea(getOra(), getDataFile());                                              // Scansione area per trovare i device con BLE nelle vicinanze --> scanArea() --> ESP32_BLEDevice.h
     
-    disconnectedDeviceBLE();                          // Disconnesione dei dispositivi che si connettono --> Mantenere il device BLE esp32 sempre disponibile alla ricerca da parte di tutti gli altri device
+    disconnectedDeviceBLE();                                                        // Disconnesione dei dispositivi che si connettono --> Mantenere il device BLE esp32 sempre disponibile alla ricerca da parte di tutti gli altri device
   
     // Controllo per accendere o tener acceso il device in base a quanto tempo rimane in attesa o se non riceve nessun segnale dall'RFNANO
     // Controllo tempo di accensione e RF-NANO non trova device nei dintorni

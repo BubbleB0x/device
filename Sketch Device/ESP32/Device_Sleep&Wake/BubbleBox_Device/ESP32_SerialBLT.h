@@ -86,10 +86,14 @@ void sendDataSmartphone()
 }
 
 //----------------------------------------- Invio dati e connessione bubbleStation --------------------------------
+/*
+ * -------------------- DA COMPLETARE --> IMPLEMETARE ANCHE LA BUBBLE STATION [APPENA POSSIBILE] -----------------
+ * 
+ */
 void sendDataBLT()
 {
   MACDevice = "";
-  MACDevice = scanArea("", "");                                             // Scansione area e viene restituito un MAC address qualora questo appartenga ad un BubbleStation
+  MACDevice = scanArea("", "");                                         // Scansione area e viene restituito un MAC address qualora questo appartenga ad un BubbleStation
   Serial.println(MACDevice);
   if(MACDevice != "")                                                   // Solamente un BubbleStation restituirà un MAC address
   {
@@ -98,7 +102,7 @@ void sendDataBLT()
     Serial.println("STATION TROVATA----INIZIO COMUNICAZIONE!");
     Serial.println(MACDevice);
     ESP_BT.begin("BubbleBox_Device");                                   // Inizializzazione Serial Bluetooth per comunicazione seriale con BubbleStation
-    accendiDisplay("", "", "");                                         // Accensione display con schermata di invio dati
+    accendiDisplay("", "", "", "");                                         // Accensione display con schermata di invio dati
     while(bubbleStation)                                                // Fino a che la bubblestation sarà attivo, la comunicazione avviene
     {
       Serial.println("Bluetooth Device is Ready to Pair");

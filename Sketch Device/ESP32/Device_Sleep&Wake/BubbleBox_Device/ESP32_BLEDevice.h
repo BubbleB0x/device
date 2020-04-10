@@ -28,6 +28,8 @@ String BubbleStation_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";  // Service 
 
 /*
  *--------------- Scansione area per il ritrovamento di altri device BLE ----------------------
+ *
+ *    scanArea(Ora di quel momento di accesso | Data odierna per poter accedere al file giornaliero)
  */
 String scanArea(String Ora, String DataFile)
 {
@@ -81,12 +83,12 @@ String scanArea(String Ora, String DataFile)
     if(UUID == BubbleStation_UUID)
     {
       Serial.println("\n-------------------------BUBBLESTATION TROVATA---------------------------");
-      RitornoMAC = MAC;
+      RitornoMAC = MAC;   // Ritorna il MAC qualora questo fosse il dispositivo BubbleStation
     }
     UUID = "";
   }
   Serial.print("\n__________________________________________________________________________");
-  return RitornoMAC;
+  return RitornoMAC;      // Ritorna il MAC vuoto perchè non ha trovato alcun Bubble Station nei dintorni
 }
 /*
  *---------------- Attivazione del BLE e di tutti i servizi annessi ---------------------------

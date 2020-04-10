@@ -27,6 +27,8 @@ String oraUltimoContatto;             // Ora del contatto
 String minutoUltimoContatto;          // Minuto del contattoù
 String nomeUltimoContatto;            // Nome del contatto
 
+int numeroContatti = 0;
+
 void writeFile(fs::FS &fs, const char * path, const char * message){
     Serial.printf("Writing file: %s\n", path);
 
@@ -161,4 +163,31 @@ void scriviContatto(String contact, String Ora, String DataFile)
       appendFile(SD, namefile.c_str(), inserimento.c_str());                  // Scrittura contatto in coda al file
     }
   }
+}
+
+//-------- Lettura del file per verificare il numero dei contatti avvenuti in giornata ----------------
+String readCountContact(fs::FS &fs, const char * path){
+  numeroContatti = 0;
+    Serial.printf("Reading file: %s\n", path);
+
+    File file = fs.open(path);
+    if(!file){
+        Serial.println("Failed to open file for reading");
+        return (String)numeroContatti;
+    }
+
+    Serial.print("Read from file: ");
+    while(file.available()){
+        bufferFile = file.readStringUntil('\n');        // veridfico che il file contine delle righe --> ogni riga equivale ad un contatto
+        ++numeroContatti;                               // Il numero dei contatti sale a +1
+    }
+    file.close();
+    return (String)numeroContatti;
+}
+
+//------------- CONTEGGIO CONTATTI -------------------------------------------------------------
+String countContatti(String DataFile)
+{
+  String namefile = "/contacts_local/contacts" + DataFile + ".txt";
+  return readCountContact(SD, namefile.c_str());        // Restituisco il numero di righe contenute nel file odierno --> equivale al numero di contatti avvenuti in giornata
 }
