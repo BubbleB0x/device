@@ -23,6 +23,10 @@
 String nomeFile;
 String bufferFile;
 
+String oraUltimoContatto;             // Ora del contatto
+String minutoUltimoContatto;          // Minuto del contattoù
+String nomeUltimoContatto;            // Nome del contatto
+
 void writeFile(fs::FS &fs, const char * path, const char * message){
     Serial.printf("Writing file: %s\n", path);
 
@@ -106,18 +110,42 @@ void setSDCard(String NomeFile)
 //------------- Controllo il file riga per riga per verificare i contatti e non considerare quelli in meno di 10 minuti --------------------
 bool readFileByLine(fs::FS &fs, const char * path, String contact){
     Serial.printf("Reading file: %s\n", path);
+    nomeUltimoContatto = "";
+    oraUltimoContatto = "";
+    minutoUltimoContatto = "";
 
     File file = fs.open(path);
     
     Serial.print("Read from file: ");
+
+    //------------- CONTROLLO IL CONTENUTO DEL FILE PER VERIFICARE L'ULTIMO CONTATTO AVVENUTO DA UN DETERMINATO MAC ADDRESS -----------------
     while(file.available())
     {
         bufferFile = file.readStringUntil('\n');
-        String oraUltimoContatto = bufferFile.substring(0, 2);                // Ora del contatto
-        String minutoUltimoContatto = bufferFile.substring(3, 5);             // Minuto del contatto
-        String nomeUltimoContatto = bufferFile.substring(24, 41);             // Nome del contatto
-        //--------- CONTROLLO CONTATTO--> DA IMPLEMENTARE!
-        file.close();
+        nomeUltimoContatto = bufferFile.substring(24, 41);              // Nome del contatto
+        if(nomeUltimoContatto == contact.substring(24, 41))
+        {
+          oraUltimoContatto = bufferFile.substring(0, 2);                // Ora del contatto
+          minutoUltimoContatto = bufferFile.substring(3, 5);             // Minuto del contatto
+        }
+    }
+    file.close();
+    //-------------- CONSIDERO L'ULTIMO CONTATTO AVVENUTO CON IL DISPOSITIVO BUBBLEBOX TROVATO ------------------
+    if(oraUltimoContatto == contact.substring(0,2))
+    {
+      if(minutoUltimoContatto != contact.substring(3,5))
+      {
+        int delta = contact.substring(3,5).toInt() - minutoUltimoContatto.toInt();
+        if(delta > 10)                                                   // Controllo lo scarto di tempo tra il contatto e l'ultima volta che avvenuto lo stesso contatto
+        {                                                                // --> Considero 10 min
+          return true;
+        }
+      }
+      return false;
+    }
+    else
+    {
+      return true;
     }
 }
 
@@ -128,7 +156,9 @@ void scriviContatto(String contact, String Ora, String DataFile)
   {
     String inserimento = Ora + "|" + MyMAC + "|" + contact + "\n"; 
     String namefile = "/contacts_local/contacts" + DataFile + ".txt";
-    readFileByLine(SD, namefile.c_str(), inserimento);                        // Lettura intero file per verificare il contenuto 
-    appendFile(SD, namefile.c_str(), inserimento.c_str());                    // Scrittura contatto in coda al file
+    if(readFileByLine(SD, namefile.c_str(), inserimento))                     // Lettura intero file per verificare il contenuto 
+    {
+      appendFile(SD, namefile.c_str(), inserimento.c_str());                  // Scrittura contatto in coda al file
+    }
   }
 }
