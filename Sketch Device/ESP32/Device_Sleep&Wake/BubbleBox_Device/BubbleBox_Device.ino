@@ -75,9 +75,9 @@ void setup()
   
   Serial.begin(115200);
 
-  setSDCard(getDataFile());         // Setto l'SD card
+  setSDCard(getDataFile());         // Setto l'SD card --> SD_GestioneSDCard.h
   
-  enableBLE();                      // Abilitare il Bluetooth Low Energy
+  enableBLE();                      // Abilitare il Bluetooth Low Energy --> ESP32_BLEDevice.h
 }
 
 //-------------------------- LOOP ----------------------------------------------------------
@@ -91,21 +91,21 @@ void loop()
     if(smartphoneConnect)
     {
       // ------ Connessione e invio dati allo smartphone
-      sendDataSmartphone();
+      sendDataSmartphone();                            // ESP32_SerialBLT.h
     }
     else
     {
       //------ Connessione e invio dati alla BubbleStation --->
-      sendDataBLT();
+      sendDataBLT();                                  // ESP32_SerialBLT.h
     }
   }
   else
   {     
     ++ControlTimeWake;                                // Tempo di accensione del display va avanti di +1 ad ogni inizio loop
   
-    accendiDisplay(getData(), getOra(), getTemp());   // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone
+    accendiDisplay(getData(), getOra(), getTemp());   // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone --> Display_GestioneDisplay.h
     
-    scanArea(getOra(), getDataFile());                               // Scansione area per trovare i device con BLE nelle vicinanze
+    scanArea(getOra(), getDataFile());                // Scansione area per trovare i device con BLE nelle vicinanze --> scanArea() --> ESP32_BLEDevice.h
     
     disconnectedDeviceBLE();                          // Disconnesione dei dispositivi che si connettono --> Mantenere il device BLE esp32 sempre disponibile alla ricerca da parte di tutti gli altri device
   

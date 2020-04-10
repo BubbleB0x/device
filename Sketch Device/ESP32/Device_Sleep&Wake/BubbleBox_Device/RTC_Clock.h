@@ -45,7 +45,6 @@ String getData()
   DateTime now = rtc.now();
   sprintf(buffer, "%04d/%02d/%02d" , now.year(), now.month(), now.day());
   Data = buffer;
-  Serial.println(Data);
   return Data;
 }
 
@@ -55,7 +54,6 @@ String getDataFile()
   DateTime now = rtc.now();
   sprintf(buffer, "%04d_%02d_%02d" , now.year(), now.month(), now.day());
   DataFile = buffer;
-  Serial.println(DataFile);
   return DataFile;
 }
 
@@ -65,7 +63,6 @@ String getOra()
   DateTime now = rtc.now();
   sprintf(buffer, "%02d:%02d", now.hour(), now.minute());;
   Ora = buffer;
-  Serial.println(Ora);
   return Ora;
 }
 

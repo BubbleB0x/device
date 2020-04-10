@@ -21,6 +21,7 @@
 #include "SPI.h"
 
 String nomeFile;
+String bufferFile;
 
 void writeFile(fs::FS &fs, const char * path, const char * message){
     Serial.printf("Writing file: %s\n", path);
@@ -74,12 +75,12 @@ bool readFile(fs::FS &fs, const char * path){
 
     Serial.print("Read from file: ");
     while(file.available()){
-        Serial.write(file.read());
         file.close();
         return true;
     }
 }
 
+//------------- SETTAGGIO SD CARD ---------------------------
 void setSDCard(String NomeFile)
 {
   if(!SD.begin()){
@@ -95,19 +96,39 @@ void setSDCard(String NomeFile)
     uint64_t cardSize = SD.cardSize() / (1024 * 1024);
     Serial.printf("SD Card Size: %lluMB\n", cardSize);
 
-    nomeFile = "/contacts_local/contacts" + NomeFile + ".txt";
-    if(!readFile(SD, nomeFile.c_str()))
+    nomeFile = "/contacts_local/contacts" + NomeFile + ".txt";  // Nome del file
+    if(!readFile(SD, nomeFile.c_str()))                         // Se il file giornaliero esiste non se ne crea un altro
     {
-      writeFile(SD, nomeFile.c_str(), "");
+      writeFile(SD, nomeFile.c_str(), "");                      // creazione del file dis storage giornaliero
     }
 }
 
+//------------- Controllo il file riga per riga per verificare i contatti e non considerare quelli in meno di 10 minuti --------------------
+bool readFileByLine(fs::FS &fs, const char * path, String contact){
+    Serial.printf("Reading file: %s\n", path);
+
+    File file = fs.open(path);
+    
+    Serial.print("Read from file: ");
+    while(file.available())
+    {
+        bufferFile = file.readStringUntil('\n');
+        String oraUltimoContatto = bufferFile.substring(0, 2);                // Ora del contatto
+        String minutoUltimoContatto = bufferFile.substring(3, 5);             // Minuto del contatto
+        String nomeUltimoContatto = bufferFile.substring(24, 41);             // Nome del contatto
+        //--------- CONTROLLO CONTATTO--> DA IMPLEMENTARE!
+        file.close();
+    }
+}
+
+//---------------- Salvataggio sul file in locale del contatto avvenuto -----------------------------
 void scriviContatto(String contact, String Ora, String DataFile)
 {
   if(Ora != "" && DataFile != "")
   {
     String inserimento = Ora + "|" + MyMAC + "|" + contact + "\n"; 
     String namefile = "/contacts_local/contacts" + DataFile + ".txt";
-    appendFile(SD, namefile.c_str(), inserimento.c_str());
+    readFileByLine(SD, namefile.c_str(), inserimento);                        // Lettura intero file per verificare il contenuto 
+    appendFile(SD, namefile.c_str(), inserimento.c_str());                    // Scrittura contatto in coda al file
   }
 }
