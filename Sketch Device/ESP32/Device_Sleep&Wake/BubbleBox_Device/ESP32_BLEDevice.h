@@ -29,7 +29,7 @@ String BubbleStation_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";  // Service 
 /*
  *--------------- Scansione area per il ritrovamento di altri device BLE ----------------------
  */
-String scanArea(String Ora)
+String scanArea(String Ora, String DataFile)
 {
   RitornoMAC = "";
   Serial.print("\n#############################################################");
@@ -74,7 +74,7 @@ String scanArea(String Ora)
     if(UUID == BubbleBox_UUID && Rssi_device > -75)
     {
       BubbleBoxTrovato = true;
-      scriviContatto(MAC, Ora);
+      scriviContatto(MAC, Ora, DataFile);
       Serial.println("\n\n------------------------CONSIDERA IL SEGNALE----------------------------");
       Serial.println("\n----------------------------CONTATTO AVVENUTO!----------------------------");
     }

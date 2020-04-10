@@ -36,7 +36,6 @@ void accendiDisplay(String Data, String Ora, String Temp)
     display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.drawXbm(18, 5, 95, 50, LogoBubble_bits);
     display.setFont(ArialMT_Plain_10);
-    // display.drawString(64, 50, "BUBBLE BOX");
     display.display();
     delay(4000);
     ++numeroDisplay;

@@ -34,9 +34,9 @@ String MyMAC;
 bool deviceBubble = false;
 
 // Caratteristiche rete BLE del decvice
-#define SERVICE_UUID "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
-#define CHARACTERISTIC_UUID_RX "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
-#define CHARACTERISTIC_UUID_TX "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+#define SERVICE_UUID "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"  // BubbleBox Device
+// #define SERVICE_UUID "4FAFC201-1FB5-459E-8FCC-C5C9C331914B"  // BubbleBox Station
+#define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 BLECharacteristic *pCharacteristic;
 BLEServer *pServer;
 BLEService *pService;
@@ -50,14 +50,15 @@ void setup()
 void loop() 
 {
   // Scansione area per trovare i device con BLE nelle vicinanze
-  scanArea(); 
+  String A = scanArea(); 
+  Serial.print(A);
   // Disconnesione dei dispositivi che si connettono
   disconnectedDeviceBLE();
 }
 
 //----------------------------------ESP32 BLE-----------------------------------------
 //------------------------------------------------------------------------------------
-void scanArea()
+String scanArea()
 {
   Serial.print("\n#############################################################");
   Serial.print("\n###### My Address MAC BLE: ");
@@ -90,15 +91,22 @@ void scanArea()
     Manufacturer = device.getManufacturerData().c_str();
     Serial.print(" | Manufacturer Device: ");
     Serial.print(Manufacturer);
+    if(device.haveServiceUUID())
+    {
+      Serial.print(" | UUID:");
+      Serial.print(device.getServiceUUID().toString().c_str());
+    }
 
     // Controllo del probabile contatto con un'altra persona che possiede un altro BubbleBox
     if(Name == "BubbleBox" && Rssi_device > -75)
     {
       Serial.println("\n\n------------------------CONSIDERA IL SEGNALE----------------------------");
       Serial.println("\n----------------------------CONTATTO AVVENUTO!----------------------------");
+      return "OK";
     }
   }
   Serial.print("\n__________________________________________________________________________");
+  return "NO";
 }
 
 /*
@@ -107,17 +115,20 @@ void scanArea()
 void enableBLE()
 {
   BLEAdvertisementData pAdvertisementData;
-  BLEDevice::init("BubbleBox"); // Init del BLE e nome device --> BubbleBox
+  BLEDevice::init("BubbleStation"); // Init del BLE e nome device --> BubbleBox
   pServer = BLEDevice::createServer();
   pService = pServer->createService(SERVICE_UUID);
   pCharacteristic = pService->createCharacteristic(
-                      CHARACTERISTIC_UUID_TX,
-                      BLECharacteristic::PROPERTY_NOTIFY
+                      CHARACTERISTIC_UUID,
+                      BLECharacteristic::PROPERTY_READ |
+                      BLECharacteristic::PROPERTY_WRITE
                       );
-  pAdvertisementData.setName("BubbleBox");
-  pAdvertisementData.setManufacturerData("BubbleBox_Device");
+  pCharacteristic->setValue("I'm BubbleStation");
   pService->start();
-  pServer->getAdvertising()->start();
+  BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
+  pAdvertising->addServiceUUID(SERVICE_UUID);
+  pAdvertising->setScanResponse(true);
+  BLEDevice::startAdvertising();
   BLEAddress  ADD = BLEDevice::getAddress();
   MyMAC = ADD.toString().c_str();
   Serial.print("\n\nMy Address:");

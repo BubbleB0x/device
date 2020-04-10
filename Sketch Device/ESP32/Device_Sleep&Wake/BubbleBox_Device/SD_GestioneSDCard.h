@@ -63,6 +63,23 @@ void createDir(fs::FS &fs, const char * path){
     }
 }
 
+bool readFile(fs::FS &fs, const char * path){
+    Serial.printf("Reading file: %s\n", path);
+
+    File file = fs.open(path);
+    if(!file){
+        Serial.println("Failed to open file for reading");
+        return false;
+    }
+
+    Serial.print("Read from file: ");
+    while(file.available()){
+        Serial.write(file.read());
+        file.close();
+        return true;
+    }
+}
+
 void setSDCard(String NomeFile)
 {
   if(!SD.begin()){
@@ -78,15 +95,19 @@ void setSDCard(String NomeFile)
     uint64_t cardSize = SD.cardSize() / (1024 * 1024);
     Serial.printf("SD Card Size: %lluMB\n", cardSize);
 
-    createDir(SD, "/contacts_local");
-    createDir(SD, "/contacts_online");
-
     nomeFile = "/contacts_local/contacts" + NomeFile + ".txt";
-    writeFile(SD, nomeFile.c_str(), "");
+    if(!readFile(SD, nomeFile.c_str()))
+    {
+      writeFile(SD, nomeFile.c_str(), "");
+    }
 }
 
-void scriviContatto(String contact, String Ora)
+void scriviContatto(String contact, String Ora, String DataFile)
 {
-  String inserimento = Ora + "|" + MyMAC + "|" + contact; 
-  appendFile(SD, nomeFile.c_str(), inserimento.c_str());
+  if(Ora != "" && DataFile != "")
+  {
+    String inserimento = Ora + "|" + MyMAC + "|" + contact + "\n"; 
+    String namefile = "/contacts_local/contacts" + DataFile + ".txt";
+    appendFile(SD, namefile.c_str(), inserimento.c_str());
+  }
 }

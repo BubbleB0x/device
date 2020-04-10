@@ -43,13 +43,13 @@ bool bubbleStation = false;           // BubbleStation rilevata
 bool smartphoneConnect = false;       // Connessione Bluetooth Serial tramite smartphone attivata/disattivata
 
 //------- Librerie realizzate "AD HOC" per la gestione dell'intero programma---------------------------------
-#include "Display_IconeDisplay.h"    // Libreria per la gestione delle icone del display 
-#include "Display_GestioneDisplay.h" // Libreria per la gestione del sisplay
-#include "SD_GestioneSDCard.h"       // Libreria per la gestione dell'SD Card
-#include "ESP32_BLEDevice.h"         // Libreria per il device Bluetooth ESP32
-#include "ESP32_SleepWake.h"         // Libreria per lo Sleep&Wake ESP32
-#include "ESP32_SerialBLT.h"         // Libreria per la connessione Bluetooth Seriale
-#include "RTC_Clock.h"               // Libreria per ora e data
+#include "Display_IconeDisplay.h"     // Libreria per la gestione delle icone del display 
+#include "Display_GestioneDisplay.h"  // Libreria per la gestione del sisplay
+#include "SD_GestioneSDCard.h"        // Libreria per la gestione dell'SD Card
+#include "ESP32_BLEDevice.h"          // Libreria per il device Bluetooth ESP32
+#include "ESP32_SleepWake.h"          // Libreria per lo Sleep&Wake ESP32
+#include "ESP32_SerialBLT.h"          // Libreria per la connessione Bluetooth Seriale
+#include "RTC_Clock.h"                // Libreria per ora e data
 
 
 //------------------------- SETUP ----------------------------------------------------
@@ -105,7 +105,7 @@ void loop()
   
     accendiDisplay(getData(), getOra(), getTemp());   // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone
     
-    scanArea(getOra());                               // Scansione area per trovare i device con BLE nelle vicinanze
+    scanArea(getOra(), getDataFile());                               // Scansione area per trovare i device con BLE nelle vicinanze
     
     disconnectedDeviceBLE();                          // Disconnesione dei dispositivi che si connettono --> Mantenere il device BLE esp32 sempre disponibile alla ricerca da parte di tutti gli altri device
   
