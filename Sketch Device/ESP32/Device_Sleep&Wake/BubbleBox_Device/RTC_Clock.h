@@ -8,6 +8,7 @@
 RTC_DS3231 rtc;
 String Data;
 String Ora;
+String Temp;
 char buffer [25] = "";
 
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -54,4 +55,14 @@ String getOra()
   Ora = buffer;
   Serial.println(Ora);
   return Ora;
+}
+
+//---------------- GET TEMPERATURA RTC ------------------------------------
+String getTemp()
+{
+  int t = (int)rtc.getTemperature();
+  Temp = (String)t;
+  Temp = Temp + "°C";
+  
+  return Temp;
 }

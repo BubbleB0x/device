@@ -98,7 +98,7 @@ void sendDataBLT()
     Serial.println("STATION TROVATA----INIZIO COMUNICAZIONE!");
     Serial.println(MACDevice);
     ESP_BT.begin("BubbleBox_Device");                                   // Inizializzazione Serial Bluetooth per comunicazione seriale con BubbleStation
-    accendiDisplay("", "");                                             // Accensione display con schermata di invio dati
+    accendiDisplay("", "", "");                                         // Accensione display con schermata di invio dati
     while(bubbleStation)                                                // Fino a che la bubblestation sarà attivo, la comunicazione avviene
     {
       Serial.println("Bluetooth Device is Ready to Pair");

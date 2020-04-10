@@ -87,7 +87,7 @@ void loop()
   //---------- Controllo stato connessione Bluetooth Seriale, per connettere smartphone o bubblestation --> Disabilito tutto il resto del device 
   if(statoBLT)
   {
-    accendiDisplay("", "");
+    accendiDisplay("", "", "");
     if(smartphoneConnect)
     {
       // ------ Connessione e invio dati allo smartphone
@@ -101,13 +101,13 @@ void loop()
   }
   else
   {     
-    ++ControlTimeWake;                // Tempo di accensione del display va avanti di +1 ad ogni inizio loop
+    ++ControlTimeWake;                                // Tempo di accensione del display va avanti di +1 ad ogni inizio loop
   
-    accendiDisplay(getData(), getOra());                 // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone
+    accendiDisplay(getData(), getOra(), getTemp());   // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone
     
-    scanArea();                       // Scansione area per trovare i device con BLE nelle vicinanze
+    scanArea();                                       // Scansione area per trovare i device con BLE nelle vicinanze
     
-    disconnectedDeviceBLE();          // Disconnesione dei dispositivi che si connettono --> Mantenere il device BLE esp32 sempre disponibile alla ricerca da parte di tutti gli altri device
+    disconnectedDeviceBLE();                          // Disconnesione dei dispositivi che si connettono --> Mantenere il device BLE esp32 sempre disponibile alla ricerca da parte di tutti gli altri device
   
     // Controllo per accendere o tener acceso il device in base a quanto tempo rimane in attesa o se non riceve nessun segnale dall'RFNANO
     // Controllo tempo di accensione e RF-NANO non trova device nei dintorni
