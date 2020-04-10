@@ -77,7 +77,7 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
-    display.drawXbm(40, 2, 50, 50, BLT_Logo_bits);
+    display.drawXbm(50, 2, 30, 50, BLT_Logo_bits);
     display.setFont(ArialMT_Plain_10);
     display.drawString(64, 50, "CONNESSIONE BLT");
     display.display();
@@ -87,8 +87,9 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
-    display.drawXbm(50, 2, 32, 60, Smartphone_Logo_bits);
+    display.drawXbm(45, 2, 40, 50, Smartphone_Logo_bits);
     display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "CONNECT SMARTPHONE");
     display.display();
     break;
 
