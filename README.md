@@ -8,6 +8,7 @@ ________________________________________________________________________________
 4. Directory Tree
 5. Firmware Schede
 6. Consumi, costi e caratteristiche
+8. Connessione moduli(implementazione device)
 
 ______________________________________________________________________________________________
 
@@ -103,3 +104,24 @@ ________________________________________________________________________________
 |Modulo GSM(NO) |  200mA    | 1 mA      | 9€     | Comunicazione dati tramite scheda SIM |
 |  |   *Totale*  |  *Totale* |  *Totale*  |  |
 |   - | 310,8(110) mA   |  2,08 mA     |   45€ (36€) |   -   |
+
+
+## Connessioni Dispositivi(Implementazione Device) ##
+_________________________________________________________________________________________________________
+
+| *ESP32* | *RFNANO* |  *RTC*  | *DISPLAY* | *SD CARD* | *Bottone 1* | *Bottone 2*|
+| -----------|---------|-------------|--------|-----------------|---------|----------|
+|   GPIO 25    | D4   |  -    |   -  |   -   |  - |  -  |
+|   GPIO 21    | -   |  SDA    |   SDA  |   -   |  -  |  - |
+|   GPIO 22    | -   |  SCL   |   SCL  |   -   | -  |  - |
+|   GPIO 19    | -   |  -    |   -  |   MISO  | -  |  - |
+|   GPIO 23    | -   |  -    |   -  |   MOSI   | -  |  - |
+|   GPIO 18    | -   |  -   |   -  |   SCK   | -  |  - |
+|   GPIO 5    | -   |  -   |   -  |   CS   | -  |  - |
+|   GPIO 14    | -   |  -   |   -  |   -   | OK(Cambio Display)  |  - |
+|   GPIO 26    | -   |  -   |   -  |   -   | -  |  OK(Cambio Display) |
+|   GPIO 2    | -   |  -   |   -  |   -   | -  |  OK(WAKE) |
+|   GPIO 15    | -   |  -   |   -  |   -   | OK(WAKE)  |  - |
+|   3V    | -   |  VCC  |   VCC  |   -   | VCC  |  VCC |
+|   5V    | -   |  -  |   -  |   VCC   | -  |  - |
+|   GND    | -   |  GND  |   GND  |   GND   | GND  |  GND |
