@@ -20,6 +20,8 @@
 #include "SD.h"
 #include "SPI.h"
 
+String nomeFile;
+
 void writeFile(fs::FS &fs, const char * path, const char * message){
     Serial.printf("Writing file: %s\n", path);
 
@@ -52,7 +54,7 @@ void appendFile(fs::FS &fs, const char * path, const char * message){
     file.close();
 }
 
-void setSDCard()
+void setSDCard(String NomeFile)
 {
   if(!SD.begin()){
         Serial.println("Card Mount Failed");
@@ -67,11 +69,12 @@ void setSDCard()
     uint64_t cardSize = SD.cardSize() / (1024 * 1024);
     Serial.printf("SD Card Size: %lluMB\n", cardSize);
 
-    writeFile(SD, "/contacts2020_04_04.txt", "");
+    nomeFile = "/contacts" + NomeFile + ".txt";
+    writeFile(SD, nomeFile.c_str(), "");
 }
 
-void scriviContatto(String contact)
+void scriviContatto(String contact, String Ora)
 {
-  String inserimento = "Mio MAC: " + MyMAC + " | CONTACT: " + contact + " | DATA: " + "Data \n"; 
-  appendFile(SD, "/contacts2020_04_04.txt", inserimento.c_str());
+  String inserimento = Ora + "|" + MyMAC + "|" + contact; 
+  appendFile(SD, nomeFile.c_str(), inserimento.c_str());
 }

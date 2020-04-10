@@ -7,8 +7,10 @@
 
 RTC_DS3231 rtc;
 String Data;
+String DataFile;
 String Ora;
 String Temp;
+int t;
 char buffer [25] = "";
 
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -47,6 +49,16 @@ String getData()
   return Data;
 }
 
+//------------------ GET DATA RTC CLOCK ----------------------------------
+String getDataFile()
+{
+  DateTime now = rtc.now();
+  sprintf(buffer, "%04d_%02d_%02d" , now.year(), now.month(), now.day());
+  DataFile = buffer;
+  Serial.println(DataFile);
+  return DataFile;
+}
+
 //----------------- GET ORA RTC CLOCK -------------------------------------
 String getOra()
 {
@@ -60,7 +72,7 @@ String getOra()
 //---------------- GET TEMPERATURA RTC ------------------------------------
 String getTemp()
 {
-  int t = (int)rtc.getTemperature();
+  t = (int)rtc.getTemperature();
   Temp = (String)t;
   Temp = Temp + "°C";
   

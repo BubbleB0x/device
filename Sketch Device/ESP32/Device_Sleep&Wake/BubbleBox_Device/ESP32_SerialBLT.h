@@ -89,7 +89,7 @@ void sendDataSmartphone()
 void sendDataBLT()
 {
   MACDevice = "";
-  MACDevice = scanArea();                                               // Scansione area e viene restituito un MAC address qualora questo appartenga ad un BubbleStation
+  MACDevice = scanArea("");                                             // Scansione area e viene restituito un MAC address qualora questo appartenga ad un BubbleStation
   Serial.println(MACDevice);
   if(MACDevice != "")                                                   // Solamente un BubbleStation restituirà un MAC address
   {

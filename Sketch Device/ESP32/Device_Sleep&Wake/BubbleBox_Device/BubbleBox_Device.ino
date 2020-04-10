@@ -54,9 +54,7 @@ bool smartphoneConnect = false;       // Connessione Bluetooth Serial tramite sm
 
 //------------------------- SETUP ----------------------------------------------------
 void setup() 
-{
-  setSDCard();                      // Setto l'SD card
-  
+{  
   BubbleBoxTrovato = false;         // setto la variabile del ritrovamento dispositivo a false
 
   // ------------ Settaggio bottone Interrupt per cambiare il display---------------------
@@ -76,6 +74,8 @@ void setup()
   ControlTimeWake = 0;              // Time clock del programma (per tenere acceso lo schermo) settato a zero(0)
   
   Serial.begin(115200);
+
+  setSDCard(getDataFile());         // Setto l'SD card
   
   enableBLE();                      // Abilitare il Bluetooth Low Energy
 }
@@ -105,7 +105,7 @@ void loop()
   
     accendiDisplay(getData(), getOra(), getTemp());   // ACCENDO IL DISPLAY --> Viene accesa la schermata in base al numero di tocchi del bottone
     
-    scanArea();                                       // Scansione area per trovare i device con BLE nelle vicinanze
+    scanArea(getOra());                               // Scansione area per trovare i device con BLE nelle vicinanze
     
     disconnectedDeviceBLE();                          // Disconnesione dei dispositivi che si connettono --> Mantenere il device BLE esp32 sempre disponibile alla ricerca da parte di tutti gli altri device
   
