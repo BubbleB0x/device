@@ -35,7 +35,7 @@ ________________________________________________________________________________
 * RF-NANO
 * Display LED
 * Modulo RTC
-* Modulo GSM
+* Modulo GSM [NON SUPPORTATO] >>>> Comunicazione Esterna sotituita in altro modo!
 * Modulo scheda SD
 
 -----------------------------------------------------------------------------------------------------
@@ -100,6 +100,6 @@ ________________________________________________________________________________
 |Display OLED| 40mA    |   0,9 mA     |   8€   |   Display 0.96" |
 | Lettore SD |  1mA    |   0 mA      |   5€   |   Data Storage  |
 | Modulo RTC |0,8mA    | 0,08 mA     |   6€   | Orologio e data |
-|Modulo GSM |  50mA    | 0,7 mA      | 9€     | Comunicazione dati tramite scheda SIM |
+|Modulo GSM(NO) |  200mA    | 1 mA      | 9€     | Comunicazione dati tramite scheda SIM |
 |  |   *Totale*  |  *Totale* |  *Totale*  |  |
-|   - | 160,8 mA   |  1,78 mA     |   45€   |   -   |
+|   - | 310,8(110) mA   |  2,08 mA     |   45€ (36€) |   -   |
