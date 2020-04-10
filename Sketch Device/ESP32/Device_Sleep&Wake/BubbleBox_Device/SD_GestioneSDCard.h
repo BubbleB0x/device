@@ -54,6 +54,15 @@ void appendFile(fs::FS &fs, const char * path, const char * message){
     file.close();
 }
 
+void createDir(fs::FS &fs, const char * path){
+    Serial.printf("Creating Dir: %s\n", path);
+    if(fs.mkdir(path)){
+        Serial.println("Dir created");
+    } else {
+        Serial.println("mkdir failed");
+    }
+}
+
 void setSDCard(String NomeFile)
 {
   if(!SD.begin()){
@@ -69,7 +78,10 @@ void setSDCard(String NomeFile)
     uint64_t cardSize = SD.cardSize() / (1024 * 1024);
     Serial.printf("SD Card Size: %lluMB\n", cardSize);
 
-    nomeFile = "/contacts" + NomeFile + ".txt";
+    createDir(SD, "/contacts_local");
+    createDir(SD, "/contacts_online");
+
+    nomeFile = "/contacts_local/contacts" + NomeFile + ".txt";
     writeFile(SD, nomeFile.c_str(), "");
 }
 
