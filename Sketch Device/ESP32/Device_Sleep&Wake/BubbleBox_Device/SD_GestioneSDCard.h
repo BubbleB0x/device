@@ -21,6 +21,7 @@
 #include "SPI.h"
 
 String nomeFile;
+String nomeFile2;
 String bufferFile;
 
 String oraUltimoContatto;             // Ora del contatto
@@ -102,10 +103,15 @@ void setSDCard(String NomeFile)
     uint64_t cardSize = SD.cardSize() / (1024 * 1024);
     Serial.printf("SD Card Size: %lluMB\n", cardSize);
 
-    nomeFile = "/contacts_local/contacts" + NomeFile + ".txt";  // Nome del file
-    if(!readFile(SD, nomeFile.c_str()))                         // Se il file giornaliero esiste non se ne crea un altro
+    nomeFile = "/contacts" + NomeFile + ".txt";                  // Nome del file
+    if(!readFile(SD, nomeFile.c_str()))                          // Se il file giornaliero esiste non se ne crea un altro
     {
-      writeFile(SD, nomeFile.c_str(), "");                      // creazione del file dis storage giornaliero
+      writeFile(SD, nomeFile.c_str(), "");                       // creazione del file dis storage giornaliero
+    }
+    nomeFile2 = "/contacts_all.txt";                              // Nome del file
+    if(!readFile(SD, nomeFile2.c_str()))                         // Se il file giornaliero esiste non se ne crea un altro
+    {
+      writeFile(SD, nomeFile2.c_str(), "");                      // creazione del file dis storage giornaliero
     }
 }
 
@@ -124,20 +130,20 @@ bool readFileByLine(fs::FS &fs, const char * path, String contact){
     while(file.available())
     {
         bufferFile = file.readStringUntil('\n');
-        nomeUltimoContatto = bufferFile.substring(24, 41);              // Nome del contatto
-        if(nomeUltimoContatto == contact.substring(24, 41))
+        nomeUltimoContatto = bufferFile.substring(35, 52);              // Nome del contatto
+        if(nomeUltimoContatto == contact.substring(35, 52))
         {
-          oraUltimoContatto = bufferFile.substring(0, 2);                // Ora del contatto
-          minutoUltimoContatto = bufferFile.substring(3, 5);             // Minuto del contatto
+          oraUltimoContatto = bufferFile.substring(11, 13);                // Ora del contatto
+          minutoUltimoContatto = bufferFile.substring(14, 16);             // Minuto del contatto
         }
     }
     file.close();
     //-------------- CONSIDERO L'ULTIMO CONTATTO AVVENUTO CON IL DISPOSITIVO BUBBLEBOX TROVATO ------------------
-    if(oraUltimoContatto == contact.substring(0,2))
+    if(oraUltimoContatto == contact.substring(11,13))
     {
-      if(minutoUltimoContatto != contact.substring(3,5))
+      if(minutoUltimoContatto != contact.substring(14,16))
       {
-        int delta = contact.substring(3,5).toInt() - minutoUltimoContatto.toInt();
+        int delta = contact.substring(14,16).toInt() - minutoUltimoContatto.toInt();
         if(delta > 10)                                                   // Controllo lo scarto di tempo tra il contatto e l'ultima volta che avvenuto lo stesso contatto
         {                                                                // --> Considero 10 min
           return true;
@@ -156,11 +162,12 @@ void scriviContatto(String contact, String Ora, String DataFile)
 {
   if(Ora != "" && DataFile != "")
   {
-    String inserimento = Ora + "|" + MyMAC + "|" + contact + "\n"; 
-    String namefile = "/contacts_local/contacts" + DataFile + ".txt";
+    String inserimento = DataFile + "|" + Ora + "|" + MyMAC + "|" + contact + "\n"; 
+    String namefile = "/contacts" + DataFile + ".txt";
     if(readFileByLine(SD, namefile.c_str(), inserimento))                     // Lettura intero file per verificare il contenuto 
     {
       appendFile(SD, namefile.c_str(), inserimento.c_str());                  // Scrittura contatto in coda al file
+      appendFile(SD, "/contacts_all.txt", inserimento.c_str());
     }
   }
 }
@@ -188,6 +195,6 @@ String readCountContact(fs::FS &fs, const char * path){
 //------------- CONTEGGIO CONTATTI -------------------------------------------------------------
 String countContatti(String DataFile)
 {
-  String namefile = "/contacts_local/contacts" + DataFile + ".txt";
+  String namefile = "/contacts" + DataFile + ".txt";
   return readCountContact(SD, namefile.c_str());        // Restituisco il numero di righe contenute nel file odierno --> equivale al numero di contatti avvenuti in giornata
 }
