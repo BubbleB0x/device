@@ -6,6 +6,9 @@
  */
 
 #include "BluetoothSerial.h"
+#include "FS.h"
+#include "SD.h"
+#include "SPI.h"
 
 String MACDevice;
 
@@ -73,8 +76,22 @@ void sendDataSmartphone()
       int incoming = ESP_BT.read(); //Read what we recevive             // Dato ricevuto dallo smartphone
       Serial.print("Received:"); 
       Serial.println(incoming);
-      ESP_BT.println("00:11:22:33:44|11:22:33:11:22|2020-12-12|12:20"); // Dato da mandare allo smartphone
-      if(incoming == 50)
+
+      //---------------- INVIO CONTATTI ALLO SMARTPHONE -------------------------------------------------------
+      if(incoming == 49)                                                  // Invio dati allo smartphone quando ricevo il carattere "1" --> TEST DI VERIFICA
+      {
+        String bufferFile;
+        File file = SD.open("/contacts_all.txt");                         // Leggo il file contenente tutti i contatti
+        Serial.print("Read from file: ");
+        while(file.available())
+        {
+            bufferFile = file.readStringUntil('\n');                      // veridfico che il file contine delle righe --> ogni riga equivale ad un contatto
+            ESP_BT.println(bufferFile);                                   // Invio ogni singolo contatto allo smartphone
+        }
+        file.close();                                                     // Chiudo il file una volta terminata la lettura dell'intero file 
+      }
+      //---------------------------------------------------------------------------------------------------------
+      if(incoming == 50)                                                // Quando arriva il numero 2 dallo smartphone chiudo la comunicazione
       {
         ESP_BT.println("Chiusura...");
         smartphoneConnect = false;                                      // Connessione smartphone disabilitata
