@@ -50,6 +50,23 @@ void closeBLTConnection()
 }
 */
 
+//------------------ Funzione che viene richiamata solamente quando un client si connette -------------------------
+void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
+  if(event == ESP_SPP_SRV_OPEN_EVT){
+    Serial.println("Client Connected");                                 // Client connesso!
+    String bufferFile;
+    File file = SD.open("/contacts_all.txt");                           // Leggo il file contenente tutti i contatti
+    Serial.print("Read from file: ");
+    while(file.available())
+    {
+       bufferFile = file.readStringUntil('\n');                         // veridfico che il file contine delle righe --> ogni riga equivale ad un contatto
+       ESP_BT.println(bufferFile);                                      // Invio ogni singolo contatto allo smartphone
+    }
+    file.close();                                                       // Chiudo il file una volta terminata la lettura dell'intero file 
+    //-----> ELIMINAZIONE DEL FILE UNA VOLTA TERMINATO L'INVIO DI TUTTI I CONTATTI ---------
+  }
+}
+
 //----------- Chiusura connessione serial bluetooth -----------
 void closeConnectionSerial()
 {
@@ -71,25 +88,12 @@ void sendDataSmartphone()
   while(smartphoneConnect)                                              // Fino a che la schermata è aperto controllo se arrivano dati dagli smartphone collegati
   {
     Serial.println("Bluetooth Device is Ready Smartphone...");          // Il device bubblebox è pronto per ricevere e inviare dati
+    ESP_BT.register_callback(callback);                                 // Richiamo funzione callback --> Invio dei dati contenente i contatti allo smartphone
     if (ESP_BT.available())                                             // Quando viene mandato un dato (qualsiasi dato) dallo smartphone il device comincia ad inviare
     {
       int incoming = ESP_BT.read(); //Read what we recevive             // Dato ricevuto dallo smartphone
       Serial.print("Received:"); 
       Serial.println(incoming);
-
-      //---------------- INVIO CONTATTI ALLO SMARTPHONE -------------------------------------------------------
-      if(incoming == 49)                                                  // Invio dati allo smartphone quando ricevo il carattere "1" --> TEST DI VERIFICA
-      {
-        String bufferFile;
-        File file = SD.open("/contacts_all.txt");                         // Leggo il file contenente tutti i contatti
-        Serial.print("Read from file: ");
-        while(file.available())
-        {
-            bufferFile = file.readStringUntil('\n');                      // veridfico che il file contine delle righe --> ogni riga equivale ad un contatto
-            ESP_BT.println(bufferFile);                                   // Invio ogni singolo contatto allo smartphone
-        }
-        file.close();                                                     // Chiudo il file una volta terminata la lettura dell'intero file 
-      }
       //---------------------------------------------------------------------------------------------------------
       if(incoming == 50)                                                // Quando arriva il numero 2 dallo smartphone chiudo la comunicazione
       {
