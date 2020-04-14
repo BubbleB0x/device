@@ -5,14 +5,15 @@
  * 
  */
 
-#include "BluetoothSerial.h"
-#include "FS.h"
-#include "SD.h"
-#include "SPI.h"
+#include "BluetoothSerial.h"        // LIBRERIA CONNESSIONE BLUETOOTH SERIALE
+
+#include "FS.h"                     //
+#include "SD.h"                     //  LIBRERIE PER LA CONNESSIONE ALLA SD CARD E LA LETTURA DEI FILE CONTENENTE I CONTATTI --> VIENE UTILIZZATO SOLO PER L'INVIO DATI ALLO SMARTPHONE DOPO LA CONNESSIONE!
+#include "SPI.h"                    //
 
 String MACDevice;
 
-BluetoothSerial ESP_BT; 
+BluetoothSerial ESP_BT;             // BLUETOOTH SERIALE
 
 //----------- Quando viene premenuto il Bottone 2 e ci si trova nella schermata della connessione BLT (Smartphone o station) 
 //----------- vine visualizzata la schermata opportuna
@@ -54,8 +55,6 @@ void closeBLTConnection()
 void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
   if(event == ESP_SPP_SRV_OPEN_EVT){
     Serial.println("Client Connected");                                 // Client connesso!
-    numeroDisplay = 8;
-    accendiDisplay("", "", "", ""); 
     String bufferFile;
     File file = SD.open("/contacts_all.txt");                           // Leggo il file contenente tutti i contatti
     Serial.print("Read from file: ");

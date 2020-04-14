@@ -87,6 +87,16 @@ bool readFile(fs::FS &fs, const char * path){
     }
 }
 
+//---------------- CANCELLAZIONE FILE ---------------------------------
+void deleteFile(fs::FS &fs, const char * path){
+    Serial.printf("Deleting file: %s\n", path);
+    if(fs.remove(path)){
+        Serial.println("File deleted");
+    } else {
+        Serial.println("Delete failed");
+    }
+}
+
 //------------- SETTAGGIO SD CARD ---------------------------
 void setSDCard(String NomeFile)
 {

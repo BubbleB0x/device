@@ -133,17 +133,20 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.display();
     break;
 
-    case 8:                                                 // Invio dati smartphone --> DA IMPLEMENTARE!
+    /* ------- PROBLEMA DI GESTIONE DISPLAY --> IL DISPLAY NON REFRESHA COME SI DEVE PER FAR VISUALIZZARE LA SCHERMATA --> <DA RISOLVERE!>
+     *  PER IL MOMENTO NIENTE VISUALIZZAZIONE SCHERMO DURANTE LA CONNESSIONE E L'INVIO DATI ALLO SMARTPHONE
+     *  
+    case 8:                                                 // Invio dati smartphone
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.setFont(ArialMT_Plain_10);
-    display.drawString(64, 0, "Smartphone CONNESSO!");
+    display.drawString(64, 0, "< CONNESSO >");
     display.drawString(64, 12, "Tramite Bluetooth");
     display.setFont(ArialMT_Plain_10);
     display.drawString(64, 40, "INVIO DATI >>>");
     display.display();
-    break;
+    break;*/
   }
 }
 
