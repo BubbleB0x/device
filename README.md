@@ -125,3 +125,5 @@ ________________________________________________________________________________
 |   3V    | -   |  VCC  |   VCC  |   -   | VCC  |  VCC |
 |   5V    | -   |  -  |   -  |   VCC   | -  |  - |
 |   GND    | -   |  GND  |   GND  |   GND   | GND  |  GND |
+
+[Circuito Completo](https://bitbucket.org/bbteam_/bubblebox-device/src/master/Circuito/Circuito_Completo.jpg)
