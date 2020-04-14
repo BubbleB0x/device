@@ -23,7 +23,7 @@ void IRAM_ATTR connessioneBLT()
     Serial.println();
     Serial.println("--------- INVIO DATI STATION --->");
     ControlTimeWake = 0;
-    numeroDisplay = 5;
+    numeroDisplay = 6;
     statoBLT = true;
   }
   else
@@ -33,7 +33,7 @@ void IRAM_ATTR connessioneBLT()
       Serial.println();
       Serial.println("--------- INVIO DATI SMARTPHONE --->");
       ControlTimeWake = 0;
-      numeroDisplay = 6;
+      numeroDisplay = 7;
       statoBLT = true;
       smartphoneConnect = true;
     } 
@@ -54,6 +54,8 @@ void closeBLTConnection()
 void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
   if(event == ESP_SPP_SRV_OPEN_EVT){
     Serial.println("Client Connected");                                 // Client connesso!
+    numeroDisplay = 8;
+    accendiDisplay("", "", "", ""); 
     String bufferFile;
     File file = SD.open("/contacts_all.txt");                           // Leggo il file contenente tutti i contatti
     Serial.print("Read from file: ");
@@ -61,6 +63,7 @@ void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
     {
        bufferFile = file.readStringUntil('\n');                         // veridfico che il file contine delle righe --> ogni riga equivale ad un contatto
        ESP_BT.println(bufferFile);                                      // Invio ogni singolo contatto allo smartphone
+       delay(100);
     }
     file.close();                                                       // Chiudo il file una volta terminata la lettura dell'intero file 
     //-----> ELIMINAZIONE DEL FILE UNA VOLTA TERMINATO L'INVIO DI TUTTI I CONTATTI ---------
@@ -123,7 +126,7 @@ void sendDataBLT()
     Serial.println("STATION TROVATA----INIZIO COMUNICAZIONE!");
     Serial.println(MACDevice);
     ESP_BT.begin("BubbleBox_Device");                                   // Inizializzazione Serial Bluetooth per comunicazione seriale con BubbleStation
-    accendiDisplay("", "", "", "");                                         // Accensione display con schermata di invio dati
+    accendiDisplay("", "", "", "");                                     // Accensione display con schermata di invio dati
     while(bubbleStation)                                                // Fino a che la bubblestation sarà attivo, la comunicazione avviene
     {
       Serial.println("Bluetooth Device is Ready to Pair");

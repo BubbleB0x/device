@@ -93,7 +93,17 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.display();
     break;
 
-    case 5:                                                 // Connessione e invio dati BubbleStation
+    case 5:                                                 // QRcode device
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.drawXbm(40, 2, 50, 50, QRCode_bits);
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "SCAN QR-COde");
+    display.display();
+    break;
+
+    case 6:                                                 // Connessione e invio dati BubbleStation
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -110,7 +120,7 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.display();
     break;
 
-    case 6:                                                  // Connessione smartphone e le credenziali di accesso e connessione
+    case 7:                                                  // Connessione smartphone e le credenziali di accesso e connessione
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -123,13 +133,15 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.display();
     break;
 
-    case 7:                                                   // Invio dati smartphone --> DA IMPLEMENTARE!
+    case 8:                                                 // Invio dati smartphone --> DA IMPLEMENTARE!
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
-    display.drawXbm(40, 2, 50, 50, SmartphoneSend_Logo_bits);
     display.setFont(ArialMT_Plain_10);
-    display.drawString(64, 50, "INVIO DATI...");
+    display.drawString(64, 0, "Smartphone CONNESSO!");
+    display.drawString(64, 12, "Tramite Bluetooth");
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 40, "INVIO DATI >>>");
     display.display();
     break;
   }
@@ -153,7 +165,7 @@ void IRAM_ATTR controlloCambioDisplay()
   statoBLT = false;
   ++numeroDisplay;
   ControlTimeWake = 0; 
-  if(numeroDisplay > 4)
+  if(numeroDisplay > 5)
    {
      numeroDisplay = 1;  
    }
