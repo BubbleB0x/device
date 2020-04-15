@@ -49,7 +49,8 @@ ________________________________________________________________________________
 * Installazione CORE ESP32:
 	- Arduino IDE > File > Impostazioni > Schede > URL Schede > `https://dl.espressif.com/dl/package_esp32_index.json`
 	- Arduino IDE > Strumenti > Scheda > Gestore Schede > ESP32
-	- Arduino IDE > Strumenti > Scheda > DOIT ESP32 DEVKIT V1 
+	- Arduino IDE > Strumenti > Scheda > ESP32 Dev Model
+	- Arduino IDE > Strumenti > Partition Scheme > NO OTA (2MB APP/2MB SPIFFS)
 * Installazione Librerie:
 	* Installazione [librerie ESP32](https://github.com/espressif/arduino-esp32)
 		- Il link contiene tantissime librery per il device ESP32, tuttavia, nella repo è presente solamente la libvreria utile che viene utilizzata (per facilitare l'inizializzazione)
@@ -84,9 +85,11 @@ ________________________________________________________________________________
 	- Aprire Arduino IDE
 	- Inserire la scheda RFNAno
 	- Arduino IDE > Strumenti > Scheda > Arduino Nano > Processore:ATMega328P
+	- Selezionare Porta
 	- Installare sketch contenuto nella directory `Sketch Device/RFNano`
 	- Inserire la scheda ESP32
-	- Arduino IDE > Strumenti > Scheda > DOIT ESP32 DEVKIT V1 
+	- Arduino IDE > Strumenti > Scheda > ESP32 Dev Model
+	- Selezionare Porta
 	- Installare sketch contenuto nella directory `Sketch Device/ESP32/Device_Sleep&Wake`
 	
 _______________________________________________________________________________________________________
