@@ -73,13 +73,13 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.display();
     break; 
 
-    case 3:                                                 // Connessione ad una Bubble Station nei dintorni
+    case 3:                                                 // Connessione ad una rete WIFI
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
-    display.drawXbm(50, 2, 30, 50, BLT_Logo_bits);
+    display.drawXbm(34, 14, 60, 36, WiFi_Logo_bits);
     display.setFont(ArialMT_Plain_10);
-    display.drawString(64, 50, "CONNESSIONE BLT");
+    display.drawString(64, 50, "CONNESSIONE WIFI");
     display.display();
     break;
 
@@ -107,16 +107,9 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
-    display.drawXbm(40, 2, 50, 50, BLTSend_Logo_bits);
+    display.drawXbm(40, 1, 50, 53, WPS_Logo_bits);
     display.setFont(ArialMT_Plain_10);
-    if(bubbleStation)
-    {
-      display.drawString(64, 50, "INVIO DATI...");
-    }
-    else
-    {
-      display.drawString(64, 50, "CONNESSIONE...");
-    }
+    display.drawString(64, 50, "ATTIVA WPS");
     display.display();
     break;
 
@@ -154,7 +147,7 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
 void spegniDisplay()
 {
   smartphoneConnect = false;
-  bubbleStation = false;
+  // bubbleStation = false; [DEPRECATO]
   statoBLT = false;
   numeroDisplay = 1;
   display.displayOff();
@@ -164,7 +157,7 @@ void spegniDisplay()
 void IRAM_ATTR controlloCambioDisplay()
 {
   smartphoneConnect = false;
-  bubbleStation = false;
+  // bubbleStation = false; [DEPRECATO]
   statoBLT = false;
   ++numeroDisplay;
   ControlTimeWake = 0; 

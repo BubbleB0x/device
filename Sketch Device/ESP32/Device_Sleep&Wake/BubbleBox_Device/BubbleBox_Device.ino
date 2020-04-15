@@ -39,7 +39,7 @@ int numeroDisplay = 0;                // Numero del display corrispondente
 //------- Caratteristiche Connessione BLT Seriale ------------------------------------
 const int connBLT = 26;               // Bottone per la connessione BLT seriale
 bool statoBLT = false;                // Bluetooth seriale attivato/disattivato
-bool bubbleStation = false;           // BubbleStation rilevata
+// bool bubbleStation = false;           // BubbleStation rilevata [DEPRECATO]
 bool smartphoneConnect = false;       // Connessione Bluetooth Serial tramite smartphone attivata/disattivata
 
 //------- Librerie realizzate "AD HOC" per la gestione dell'intero programma---------------------------------
@@ -50,6 +50,7 @@ bool smartphoneConnect = false;       // Connessione Bluetooth Serial tramite sm
 #include "ESP32_SleepWake.h"          // Libreria per lo Sleep&Wake ESP32
 #include "ESP32_SerialBLT.h"          // Libreria per la connessione Bluetooth Seriale
 #include "RTC_Clock.h"                // Libreria per ora e data
+#include "ESP32_WPS.h"                // Libreria per la connessione WiFi
 
 
 //------------------------- SETUP ----------------------------------------------------
@@ -59,14 +60,14 @@ void setup()
 
   // ------------ Settaggio bottone Interrupt per cambiare il display---------------------
   pinMode(statoDisplay, INPUT_PULLUP);
-  attachInterrupt(statoDisplay, controlloCambioDisplay, HIGH);
+  attachInterrupt(statoDisplay, controlloCambioDisplay, RISING);
   display.init();
   display.flipScreenVertically();
   //---------------------------------------------------------------------------------------
 
   // ------------ Settaggio bottone Interrupt per cambiare il display---------------------
   pinMode(connBLT, INPUT_PULLUP);
-  attachInterrupt(connBLT, connessioneBLT, HIGH);
+  attachInterrupt(connBLT, connessioneBLT, RISING);
   //---------------------------------------------------------------------------------------
 
   //------------ Settaggio INPUT proveniente dall'RFNano per i dispositivi nei dintorni----
@@ -95,8 +96,7 @@ void loop()
     }
     else
     {
-      //------ Connessione e invio dati alla BubbleStation --->
-      sendDataBLT();                                                                // ESP32_SerialBLT.h
+      connectWPS();                                                                 // Connessione WPS --> ESP32_WPS.h
     }
   }
   else

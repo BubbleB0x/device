@@ -19,17 +19,7 @@ BluetoothSerial ESP_BT;             // BLUETOOTH SERIALE
 //----------- vine visualizzata la schermata opportuna
 void IRAM_ATTR connessioneBLT()
 {
-  if(numeroDisplay == 3)
-  {
-    Serial.println();
-    Serial.println("--------- INVIO DATI STATION --->");
-    ControlTimeWake = 0;
-    numeroDisplay = 6;
-    statoBLT = true;
-  }
-  else
-  {
-    if(numeroDisplay == 4)
+  if(numeroDisplay == 4)
     {
       Serial.println();
       Serial.println("--------- INVIO DATI SMARTPHONE --->");
@@ -38,7 +28,15 @@ void IRAM_ATTR connessioneBLT()
       statoBLT = true;
       smartphoneConnect = true;
     } 
-  }
+   if(numeroDisplay == 3)
+   {
+    Serial.println();
+    Serial.println("--------- CONNESSIONE WPS ----->");
+    ControlTimeWake = 0;
+    numeroDisplay = 6;
+    statoBLT = true;
+    smartphoneConnect = false;
+   }
 }
 
 /*   -----> Da Abilitare, qualora ne avessimo bisogno!
@@ -76,7 +74,7 @@ void closeConnectionSerial()
   ControlTimeWake = 14;       // Tempo del device viene portato a termine per farlo ripartire e ricaricare tutto
   numeroDisplay = 1;          // Schermata display viene portata alla principale --> Orologio
   statoBLT = false;           // Stato attivo/disattivo BLT portato a disattivato
-  bubbleStation = false;      // Ritrovamento bubblestation portato a disattivato
+  // bubbleStation = false;      // Ritrovamento bubblestation portato a disattivato [DEPRECATO]
   smartphoneConnect = false;  // Ritrovamento smartphone portato a disattivato
 
   //--------------------------> Il device riprende il suo normale funzionamento
@@ -108,11 +106,12 @@ void sendDataSmartphone()
   closeConnectionSerial();                                              // Chiusura connessione serial bluetooth
 }
 
+
+//---------------------------------- << DEPRECATO >> -----------------------------------------------------------------------
 //----------------------------------------- Invio dati e connessione bubbleStation --------------------------------
 /*
  * -------------------- DA COMPLETARE --> IMPLEMETARE ANCHE LA BUBBLE STATION [APPENA POSSIBILE] -----------------
  * 
- */
 void sendDataBLT()
 {
   MACDevice = "";
@@ -146,3 +145,4 @@ void sendDataBLT()
     closeConnectionSerial();                                            // Il device continua il suo normale funzionamento
   }
 }
+*/
