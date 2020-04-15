@@ -92,7 +92,7 @@ void loop()
     if(smartphoneConnect)                                                           // Controllo se sta avvenendo una connessione ad uno smartphone
     {
       // ------ Connessione e invio dati allo smartphone
-      sendDataSmartphone();                                                         // ESP32_SerialBLT.h
+      sendDataSmartphone();                                                         // --> ESP32_SerialBLT.h
     }
     else
     {
@@ -114,8 +114,8 @@ void loop()
     // Controllo tempo di accensione e RF-NANO non trova device nei dintorni
     if(ControlTimeWake == 15 && digitalRead(RF_Nano) == LOW)
     {
-      spegniDisplay();
-      setSleepWake();
+      spegniDisplay();                                                              // --> Display_GestioneDisplay.h
+      setSleepWake();                                                               // --> ESP32_Sleep&Wake.h
     }
     else
     {

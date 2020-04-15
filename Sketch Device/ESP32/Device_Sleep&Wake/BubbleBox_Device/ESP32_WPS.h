@@ -22,7 +22,11 @@ WPS
 
 static esp_wps_config_t config;
 
+//------------------------- Connessione alla WIFI tramite WPS -----------------------------------------------------------------------------
 bool connessoWPS = false;
+
+//------------------------- Token per effettuare le richieste di tipo POST al server --------------------------------------------------------
+const String Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJtYWMiOiIyNDo2ZjoyODo5NzoyMTo3MiIsInJvbGUiOiJkZXZpY2UifSwiaWF0IjoxNTg2OTYzNTQ4fQ.eEDJMPJEpTKX7B50LdvT5cIqvuCjOz-0wSWPW7dk0U8";
 
 //--------------- Caratteristiche server ---------------------
 const char* serverName = "http://37.77.97.144:9200/devices/blast/";
@@ -96,12 +100,12 @@ void sendDataServer()
   delay(2000);
   String bufferFile;
   String bodyContacts = "";
-  File file = SD.open("/contacts_all.txt");                           // Leggo il file contenente tutti i contatti
+  File file = SD.open("/contacts_all.txt");                                       // Leggo il file contenente tutti i contatti
   Serial.print("Read from file: ");
   while(file.available())
   {
-     bufferFile = file.readStringUntil('\n');                         // veridfico che il file contine delle righe --> ogni riga equivale ad un contatto
-     bufferFile = base64::encode(bufferFile);                         // Conversione in base64
+     bufferFile = file.readStringUntil('\n');                                     // veridfico che il file contine delle righe --> ogni riga equivale ad un contatto
+     bufferFile = base64::encode(bufferFile);                                     // Conversione in base64
      if(bodyContacts != "")
      {
         bodyContacts = bodyContacts + "," + "\"" + bufferFile + "\"";             // Construzione contatti in base64 e concatenamemto per l'invio tramite REST
@@ -113,18 +117,25 @@ void sendDataServer()
      delay(100);
    }
   file.close();
-  Serial.println(bodyContacts);                                           // Stampa dei contatti convertiti in base64
-  http.begin(serverName);                                                 // Inizializzazione chiamata server
-  http.addHeader("authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJtYWMiOiIyNDo2ZjoyODo5NzoyMTo3MiIsInJvbGUiOiJkZXZpY2UifSwiaWF0IjoxNTg2OTYzNTQ4fQ.eEDJMPJEpTKX7B50LdvT5cIqvuCjOz-0wSWPW7dk0U8");
-  http.addHeader("Content-Type", "application/json");                     // Invio del JSON tramite POST 
-  int httpResponseCode = http.POST("{\"blast\":[" + bodyContacts + "]}"); // Body JSON POST HTTP Client
+  Serial.println(bodyContacts);                                                   // Stampa dei contatti convertiti in base64
+  //------------------------- POST -----------------------------------------------------------------------------------------
+  http.begin(serverName);                                                         // Inizializzazione chiamata server
+  http.addHeader("authorization", "Bearer " + Token);                             // Header per effettuare la POST al server --> Autorizzazione | ContentType 
+  http.addHeader("Content-Type", "application/json");                             // Invio del JSON tramite POST 
+  int httpResponseCode = http.POST("{\"blast\":[" + bodyContacts + "]}");         // Body JSON POST HTTP Client
   //int httpResponseCode = http.GET();
-  Serial.println(httpResponseCode);                                       // Codice di risposta della richiesta POST 
-  http.end();                                                             // Chiusura HTTP REST
-  Serial.println("{\"blast\":[" + bodyContacts + "]}");
+  Serial.println(httpResponseCode);                                               // Codice di risposta della richiesta POST 
+  http.end();                                                                     // Chiusura HTTP REST
+  if(httpResponseCode == 200)
+  {
+    // -----------> Inserimento avvenuto con successo all'interno del server!
+    //------------> Bisogna cancellare il file contacts_all.txt con tutti i contatti al suo interno
+  }
+  //--------------------------------------------------------------------------------------------------------------------------
   delay(5000);
 }
 
+//------------------------------ Funzione di connessione alla rete WIFI tramite WPS -------------------------------------------
 void connectWPS(){
 
   Serial.println("Connessione WPS in corso...");
@@ -138,15 +149,33 @@ void connectWPS(){
   esp_wifi_wps_enable(&config);
   esp_wifi_wps_start(0);
 
-  while(!connessoWPS)
+  int contWPS = 0;                                                // Variabile contatore per verificare il tempo di non avvenuta connessione al WIFI
+
+  while(!connessoWPS && contWPS < 100)                            // Verifico se la connessione è avvenuta o sono scaduti i 20 secondi per far avvenire la connessione
   {
     Serial.println("CONNESSIONE...");
-    delay(500);
+    delay(200);
+    ++contWPS;                                                    // Incremento tempo per la non avvenuta connessione
+    Serial.println(contWPS);
   }
-  Serial.println("Connesso al WIFI!");
-  sendDataServer(); //------ Invio dati al server tramite REST -----> DA IMPLEMENTARE!
-  ControlTimeWake = 14;
-  numeroDisplay = 1;
-  statoBLT = false;
-  smartphoneConnect = false;
+  if(connessoWPS)                                                 // Connessione avvenuta
+  {
+    Serial.println("Connesso al WIFI!");
+    sendDataServer();                                             // Invio dati al server tramite POST
+    ControlTimeWake = 14;                                         // |
+    numeroDisplay = 1;                                            // |   Resetto i parametri
+    statoBLT = false;                                             // |   del device
+    smartphoneConnect = false;                                    // |
+  }
+  if(contWPS > 99)                                                // Tempo di non avvenuta connessione superata
+  {
+    esp_wifi_wps_disable();                                       // Disabilito la funzione WPS
+    Serial.println("Chiusura connessione WPS...");
+    Serial.println("Troppo tempo per la risposta!");
+    delay(200);
+    ControlTimeWake = 14;                                         // |
+    numeroDisplay = 1;                                            // |  Resetto i parametri
+    statoBLT = false;                                             // |  del device
+    smartphoneConnect = false;                                    // |
+  }
 }
