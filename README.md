@@ -89,6 +89,7 @@ ________________________________________________________________________________
 	- Installare sketch contenuto nella directory `Sketch Device/RFNano`
 	- Inserire la scheda ESP32
 	- Arduino IDE > Strumenti > Scheda > ESP32 Dev Model
+	- Arduino IDE > Strumenti > Partition Scheme > NO OTA (2MB APP/2MB SPIFFS)
 	- Selezionare Porta
 	- Installare sketch contenuto nella directory `Sketch Device/ESP32/Device_Sleep&Wake`
 	
