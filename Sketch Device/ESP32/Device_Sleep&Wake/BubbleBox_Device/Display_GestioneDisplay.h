@@ -15,8 +15,8 @@
 
  
 // Librerie Displey OLED
-#include <Wire.h>               // Only needed for Arduino 1.6.5 and earlier
-#include "SSD1306Wire.h"        // legacy: #include "SSD1306.h"
+#include <Wire.h>                                       // Only needed for Arduino 1.6.5 and earlier
+#include "SSD1306Wire.h"                                // legacy: #include "SSD1306.h"
 SSD1306Wire display(0x3c, 21, 22);
 
 //--------------- Visualizzazione sul display principale del contatto avvenuto con un altro device nelle vicinanze -----------------

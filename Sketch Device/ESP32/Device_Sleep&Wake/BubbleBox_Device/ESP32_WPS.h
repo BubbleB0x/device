@@ -5,6 +5,7 @@
 
 #include "WiFi.h"
 #include "esp_wps.h"
+#include "HTTPClient.h"
 /*
 Change the definition of the WPS mode
 from WPS_TYPE_PBC to WPS_TYPE_PIN in
@@ -17,9 +18,15 @@ WPS
 #define ESP_MODEL_NAME    "BUBBLE IOT"
 #define ESP_DEVICE_NAME   "BUBBLEBOX DEVICE"
 
+#include <base64.h>
+
 static esp_wps_config_t config;
 
 bool connessoWPS = false;
+
+//--------------- Caratteristiche server ---------------------
+const char* serverName = "37.77.97.144:9200";
+HTTPClient http;
 
 void wpsInitConfig(){
   config.crypto_funcs = &g_wifi_default_wps_crypto_funcs;
@@ -80,12 +87,40 @@ void WiFiEvent(WiFiEvent_t event, system_event_info_t info){
   }
 }
 
+//---------------- Invio dati al server con tutti i contatti ----------------
 void sendDataServer()
 {
   // Da implementare
   numeroDisplay = 8;
   accendiDisplay("", "", "", "");
   delay(2000);
+  String bufferFile;
+  String bodyContacts = "";
+  File file = SD.open("/contacts_all.txt");                           // Leggo il file contenente tutti i contatti
+  Serial.print("Read from file: ");
+  while(file.available())
+  {
+     bufferFile = file.readStringUntil('\n');                         // veridfico che il file contine delle righe --> ogni riga equivale ad un contatto
+     bufferFile = base64::encode(bufferFile);                         // Conversione in base64
+     if(bodyContacts != "")
+     {
+        bodyContacts = bodyContacts + ",\n" + bufferFile;             // Construzione contatti in base64 e concatenamemto per l'invio tramite REST
+     }
+     else
+     {
+        bodyContacts = bufferFile;
+     }
+     delay(100);
+   }
+  file.close();
+  Serial.println(bodyContacts);                                           // Stampa dei contatti convertiti in base64
+  //http.begin(serverName);                                                 // Inizializzazione chiamata server
+  //http.addHeader("Content-Type", "application/json");                     // Invio del JSON tramite POST 
+  //int httpResponseCode = http.POST("{\"blast\":[" + bodyContacts + "]}"); // Body JSON POST HTTP Client
+  //Serial.println(httpResponseCode);                                       // Codice di risposta della richiesta POST 
+  //http.end();                                                             // Chiusura HTTP REST
+  Serial.println("{\"blast\":[" + bodyContacts + "]}");
+  delay(5000);
 }
 
 void connectWPS(){
