@@ -39,7 +39,7 @@ int numeroDisplay = 0;                // Numero del display corrispondente
 //------- Caratteristiche Connessione BLT Seriale ------------------------------------
 const int connBLT = 26;               // Bottone per la connessione BLT seriale
 bool statoBLT = false;                // Bluetooth seriale attivato/disattivato
-// bool bubbleStation = false;           // BubbleStation rilevata [DEPRECATO]
+// bool bubbleStation = false;           // BubbleStation rilevata [DEPRECATO] --> UTILIZZO DELLA BUBBLESTATION SOSPESO!
 bool smartphoneConnect = false;       // Connessione Bluetooth Serial tramite smartphone attivata/disattivata
 
 //------- Librerie realizzate "AD HOC" per la gestione dell'intero programma---------------------------------
@@ -58,14 +58,14 @@ void setup()
 {  
   BubbleBoxTrovato = false;         // setto la variabile del ritrovamento dispositivo a false
 
-  // ------------ Settaggio bottone Interrupt per cambiare il display---------------------
+  // ------------ Settaggio bottone Interrupt per cambiare il display ---------------------
   pinMode(statoDisplay, INPUT_PULLUP);
   attachInterrupt(statoDisplay, controlloCambioDisplay, RISING);
   display.init();
   display.flipScreenVertically();
   //---------------------------------------------------------------------------------------
 
-  // ------------ Settaggio bottone Interrupt per cambiare il display---------------------
+  // ------------ Settaggio bottone Interrupt per cambiare il display sulla connessione BLT e WPS ---------------------
   pinMode(connBLT, INPUT_PULLUP);
   attachInterrupt(connBLT, connessioneBLT, RISING);
   //---------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ void setup()
 void loop() 
 {
   
-  //---------- Controllo stato connessione Bluetooth Seriale, per connettere smartphone o bubblestation --> Disabilito tutto il resto del device 
+  //---------- Controllo stato connessione Bluetooth Seriale, per connettere smartphone o WIFI --> Disabilito tutto il resto del device 
   if(statoBLT)
   {
     accendiDisplay("", "", "", "");
@@ -96,6 +96,7 @@ void loop()
     }
     else
     {
+      // ------ Connessione alla WIFI e invio dati tramite REST API
       connectWPS();                                                                 // Connessione WPS --> ESP32_WPS.h
     }
   }

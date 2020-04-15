@@ -3,6 +3,14 @@
 
 /*
  * Librerie: https://github.com/ThingPulse/esp8266-oled-ssd1306
+ * 
+ * Connettere Il Display all'ESP32
+ *    
+ *    DISPLAY   -    ESP32
+ *      VCC           3V
+ *      GND          GND
+ *      SDA        GPIO 22
+ *      SCL        GPIO 21
  */
 
  
@@ -11,6 +19,7 @@
 #include "SSD1306Wire.h"        // legacy: #include "SSD1306.h"
 SSD1306Wire display(0x3c, 21, 22);
 
+//--------------- Visualizzazione sul display principale del contatto avvenuto con un altro device nelle vicinanze -----------------
 void displayBubbleBoxContatto()
 {
   display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -103,7 +112,7 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.display();
     break;
 
-    case 6:                                                 // Connessione e invio dati BubbleStation
+    case 6:                                                 // Connessione WIFI
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -126,6 +135,16 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.display();
     break;
 
+    case 8:                                                  // Connessione WIFI avvenuta con successo
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.drawXbm(35, 3, 65, 50, WiFiSend_bits);
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "INVIO DATI...");
+    display.display();
+    break;
+
     /* ------- PROBLEMA DI GESTIONE DISPLAY --> IL DISPLAY NON REFRESHA COME SI DEVE PER FAR VISUALIZZARE LA SCHERMATA --> <DA RISOLVERE!>
      *  PER IL MOMENTO NIENTE VISUALIZZAZIONE SCHERMO DURANTE LA CONNESSIONE E L'INVIO DATI ALLO SMARTPHONE
      *  
@@ -143,7 +162,7 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
   }
 }
 
-//---------------------------- Spegnimento diplay
+//---------------------------- Spegnimento diplay ---------------------------------------------------
 void spegniDisplay()
 {
   smartphoneConnect = false;
@@ -153,7 +172,7 @@ void spegniDisplay()
   display.displayOff();
 }
 
-//---------------- Funzione Interrupt per il cambio dello schermo del displey
+//---------------- Funzione Interrupt per il cambio dello schermo del displey -------------------------
 void IRAM_ATTR controlloCambioDisplay()
 {
   smartphoneConnect = false;

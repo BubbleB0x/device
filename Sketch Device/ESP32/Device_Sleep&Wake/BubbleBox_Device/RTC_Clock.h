@@ -1,6 +1,14 @@
 /*
  * Library RTC Module: https://github.com/adafruit/RTClib
  * 
+ * 
+ * Connettere Il modulo RTC all'ESP32
+ *    
+ *    RTC CLOCK  -   ESP32
+ *      VCC           3V
+ *      GND          GND
+ *      SDA        GPIO 22
+ *      SCL        GPIO 21
  */
 
 #include "RTClib.h";

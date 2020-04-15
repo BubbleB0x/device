@@ -1,3 +1,8 @@
+/*
+ *        Library github: https://github.com/espressif/arduino-esp32/tree/master/libraries/WiFi/examples/WPS
+ *        
+ */
+
 #include "WiFi.h"
 #include "esp_wps.h"
 /*
@@ -78,6 +83,9 @@ void WiFiEvent(WiFiEvent_t event, system_event_info_t info){
 void sendDataServer()
 {
   // Da implementare
+  numeroDisplay = 8;
+  accendiDisplay("", "", "", "");
+  delay(2000);
 }
 
 void connectWPS(){

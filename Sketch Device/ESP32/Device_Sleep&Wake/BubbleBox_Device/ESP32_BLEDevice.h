@@ -2,7 +2,9 @@
 //--------------------------------------------------------------------------------
 /*
  * Library ESP32: https://github.com/espressif/arduino-esp32/tree/master/libraries/BLE
+ * 
  */
+ 
 // Librerie ESP32 BLE 
 #include <BLEAdvertisedDevice.h>
 #include <BLEDevice.h>
