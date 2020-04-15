@@ -25,7 +25,7 @@ static esp_wps_config_t config;
 bool connessoWPS = false;
 
 //--------------- Caratteristiche server ---------------------
-const char* serverName = "37.77.97.144:9200";
+const char* serverName = "http://37.77.97.144:9200/devices/blast/";
 HTTPClient http;
 
 void wpsInitConfig(){
@@ -104,21 +104,23 @@ void sendDataServer()
      bufferFile = base64::encode(bufferFile);                         // Conversione in base64
      if(bodyContacts != "")
      {
-        bodyContacts = bodyContacts + ",\n" + bufferFile;             // Construzione contatti in base64 e concatenamemto per l'invio tramite REST
+        bodyContacts = bodyContacts + "," + "\"" + bufferFile + "\"";             // Construzione contatti in base64 e concatenamemto per l'invio tramite REST
      }
      else
      {
-        bodyContacts = bufferFile;
+        bodyContacts = "\"" + bufferFile + "\"";
      }
      delay(100);
    }
   file.close();
   Serial.println(bodyContacts);                                           // Stampa dei contatti convertiti in base64
-  //http.begin(serverName);                                                 // Inizializzazione chiamata server
-  //http.addHeader("Content-Type", "application/json");                     // Invio del JSON tramite POST 
-  //int httpResponseCode = http.POST("{\"blast\":[" + bodyContacts + "]}"); // Body JSON POST HTTP Client
-  //Serial.println(httpResponseCode);                                       // Codice di risposta della richiesta POST 
-  //http.end();                                                             // Chiusura HTTP REST
+  http.begin(serverName);                                                 // Inizializzazione chiamata server
+  http.addHeader("authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJtYWMiOiIyNDo2ZjoyODo5NzoyMTo3MiIsInJvbGUiOiJkZXZpY2UifSwiaWF0IjoxNTg2OTYzNTQ4fQ.eEDJMPJEpTKX7B50LdvT5cIqvuCjOz-0wSWPW7dk0U8");
+  http.addHeader("Content-Type", "application/json");                     // Invio del JSON tramite POST 
+  int httpResponseCode = http.POST("{\"blast\":[" + bodyContacts + "]}"); // Body JSON POST HTTP Client
+  //int httpResponseCode = http.GET();
+  Serial.println(httpResponseCode);                                       // Codice di risposta della richiesta POST 
+  http.end();                                                             // Chiusura HTTP REST
   Serial.println("{\"blast\":[" + bodyContacts + "]}");
   delay(5000);
 }
