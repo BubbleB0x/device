@@ -20,17 +20,22 @@ WPS
 
 #include <base64.h>
 
+//----------- JSON -----------------------------------------------------------------------------------------------------------------------
+#include <ArduinoJson.h>
+DynamicJsonDocument doc(1024);
+
 static esp_wps_config_t config;
 
 //------------------------- Connessione alla WIFI tramite WPS -----------------------------------------------------------------------------
 bool connessoWPS = false;
-
-//------------------------- Token per effettuare le richieste di tipo POST al server --------------------------------------------------------
-const String Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJtYWMiOiIyNDo2ZjoyODo5NzoyMTo3MiIsInJvbGUiOiJkZXZpY2UifSwiaWF0IjoxNTg2OTYzNTQ4fQ.eEDJMPJEpTKX7B50LdvT5cIqvuCjOz-0wSWPW7dk0U8";
+const char* ssid = "Linkem1_05B76F";
+const char* password =  "Casa1234";
 
 //--------------- Caratteristiche server ---------------------
-const char* serverName = "http://37.77.97.144:9200/devices/blast/";
+const char* serverNamePost = "http://37.77.97.144:9200/devices/blast/";
+const char* serverNameGetToken = "http://37.77.97.144:9200/loginDevice/";
 HTTPClient http;
+const char* pass = "prova2";
 
 void wpsInitConfig(){
   config.crypto_funcs = &g_wifi_default_wps_crypto_funcs;
@@ -91,6 +96,31 @@ void WiFiEvent(WiFiEvent_t event, system_event_info_t info){
   }
 }
 
+//---------------- Ottenimento token per effettuare le POST al server --------------------------
+String getToken()
+{
+  http.begin(serverNameGetToken);                                                  // Inizializzazione chiamata server per ottenere il token
+  String MAC_PASS = MyMAC + ":::" + pass;                                          // Stringa da mandare durante la chiamata POST per ricevere il token
+  MAC_PASS = base64::encode(MAC_PASS);                                             // Conversione in base64
+  http.addHeader("authorization", "Basic " + MAC_PASS);
+  http.addHeader("content-length", "0");
+  http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  int httpResponseCode = http.POST("");
+  Serial.println(httpResponseCode);
+  if(httpResponseCode == 200)
+  {
+    String payload = http.getString();
+    deserializeJson(doc, payload);
+    JsonObject obj = doc.as<JsonObject>();
+    String access_token = obj["access_token"];
+    Serial.println(access_token);
+    http.end();
+    return access_token;
+  }
+  http.end();
+  return "";
+}
+
 //---------------- Invio dati al server con tutti i contatti ----------------
 void sendDataServer()
 {
@@ -118,8 +148,10 @@ void sendDataServer()
    }
   file.close();
   Serial.println(bodyContacts);                                                   // Stampa dei contatti convertiti in base64
+  
+  String Token = getToken();
   //------------------------- POST -----------------------------------------------------------------------------------------
-  http.begin(serverName);                                                         // Inizializzazione chiamata server
+  http.begin(serverNamePost);                                                     // Inizializzazione chiamata server
   http.addHeader("authorization", "Bearer " + Token);                             // Header per effettuare la POST al server --> Autorizzazione | ContentType 
   http.addHeader("Content-Type", "application/json");                             // Invio del JSON tramite POST 
   int httpResponseCode = http.POST("{\"blast\":[" + bodyContacts + "]}");         // Body JSON POST HTTP Client
@@ -129,7 +161,7 @@ void sendDataServer()
   if(httpResponseCode == 200)
   {
     // -----------> Inserimento avvenuto con successo all'interno del server!
-    //------------> Bisogna cancellare il file contacts_all.txt con tutti i contatti al suo interno
+    //------------> Bisogna cancellare il file contacts_all.txt con tutti i contatti al suo interno [DA FARE IL PRIMA POSSIBILE!]
   }
   //--------------------------------------------------------------------------------------------------------------------------
   delay(5000);
@@ -137,7 +169,7 @@ void sendDataServer()
 
 //------------------------------ Funzione di connessione alla rete WIFI tramite WPS -------------------------------------------
 void connectWPS(){
-
+/*
   Serial.println("Connessione WPS in corso...");
 
   WiFi.onEvent(WiFiEvent);
@@ -151,7 +183,7 @@ void connectWPS(){
 
   int contWPS = 0;                                                // Variabile contatore per verificare il tempo di non avvenuta connessione al WIFI
 
-  while(!connessoWPS && contWPS < 100)                            // Verifico se la connessione è avvenuta o sono scaduti i 20 secondi per far avvenire la connessione
+  while(!connessoWPS && contWPS < 150)                            // Verifico se la connessione è avvenuta o sono scaduti i 20/30 secondi per far avvenire la connessione
   {
     Serial.println("CONNESSIONE...");
     delay(200);
@@ -167,7 +199,7 @@ void connectWPS(){
     statoBLT = false;                                             // |   del device
     smartphoneConnect = false;                                    // |
   }
-  if(contWPS > 99)                                                // Tempo di non avvenuta connessione superata
+  if(contWPS > 149)                                               // Tempo di non avvenuta connessione superata
   {
     esp_wifi_wps_disable();                                       // Disabilito la funzione WPS
     Serial.println("Chiusura connessione WPS...");
@@ -178,4 +210,16 @@ void connectWPS(){
     statoBLT = false;                                             // |  del device
     smartphoneConnect = false;                                    // |
   }
+  */
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) 
+  {
+    delay(500);
+    Serial.println("Connecting to WiFi..");
+  }
+  sendDataServer();                                             // Invio dati al server tramite POST
+  ControlTimeWake = 14;                                         // |
+  numeroDisplay = 1;                                            // |   Resetto i parametri
+  statoBLT = false;                                             // |   del device
+  smartphoneConnect = false;
 }
