@@ -81,16 +81,21 @@ ________________________________________________________________________________
 * Clonare la repo
 	- `git clone https://orteip94@bitbucket.org/bbteam_/bubblebox-device.git`
 * Installare gli sketch sulle schede:
-	- Aprire Arduino IDE
-	- Inserire la scheda RFNAno
-	- Arduino IDE > Strumenti > Scheda > Arduino Nano > `Processore:ATMega328P`
-	- Selezionare Porta
-	- Installare sketch contenuto nella directory `Sketch Device/RFNano`
-	- Inserire la scheda ESP32
-	- Arduino IDE > Strumenti > Scheda > `ESP32 Dev Model`
-	- Arduino IDE > Strumenti > Partition Scheme > `NO OTA (2MB APP/2MB SPIFFS)`
-	- Selezionare Porta
-	- Installare sketch contenuto nella directory `Sketch Device/ESP32/Device_Sleep&Wake`
+	- RFNANO:
+		- Aprire Arduino IDE
+		- Inserire la scheda RFNAno
+		- Arduino IDE > Strumenti > Scheda > Arduino Nano > `Processore:ATMega328P`
+		- Selezionare Porta
+		- Installare sketch contenuto nella directory `Sketch Device/RFNano`
+	- ESP32:
+		- Aprire `ESP32/Device_Sleep&Wake/ESP_WPS.h`
+		- Modificare le righe 34 e 35 con le credenziali della BUBBLESTATION
+		- Salvare e chiudere
+		- Inserire la scheda ESP32
+		- Arduino IDE > Strumenti > Scheda > `ESP32 Dev Model`
+		- Arduino IDE > Strumenti > Partition Scheme > `NO OTA (2MB APP/2MB SPIFFS)`
+		- Selezionare Porta
+		- Installare sketch contenuto nella directory `Sketch Device/ESP32/Device_Sleep&Wake`
 	
 _______________________________________________________________________________________________________
 
