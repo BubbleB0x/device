@@ -11,55 +11,7 @@
 #include "SD.h"                     //  LIBRERIE PER LA CONNESSIONE ALLA SD CARD E LA LETTURA DEI FILE CONTENENTE I CONTATTI --> VIENE UTILIZZATO SOLO PER L'INVIO DATI ALLO SMARTPHONE DOPO LA CONNESSIONE!
 #include "SPI.h"                    //
 
-// String MACDevice;                   // MAC Address del bluetooth del BubbleStation [DEPRECATO]
-
 BluetoothSerial ESP_BT;             // BLUETOOTH SERIALE
-
-//----------- Quando viene premenuto il Bottone 2 e ci si trova nella schermata della connessione BLT (Smartphone o station) 
-//----------- vine visualizzata la schermata opportuna
-void IRAM_ATTR connessioneBLT()
-{
-  if(numeroDisplay == 4)
-    {
-      Serial.println();
-      Serial.println("--------- INVIO DATI SMARTPHONE --->");
-      ControlTimeWake = 0;
-      numeroDisplay = 8;
-      statoBLT = true;
-      smartphoneConnect = true;
-      bubbleStation = false;
-    } 
-   if(numeroDisplay == 3)
-   {
-    Serial.println();
-    Serial.println("--------- CONNESSIONE WPS ----->");
-    ControlTimeWake = 0;
-    numeroDisplay = 7;
-    statoBLT = true;
-    smartphoneConnect = false;
-    bubbleStation = false;
-   }
-   if(numeroDisplay == 5)
-   {
-    Serial.println();
-    Serial.println("--------- CONNESSIONE STATION ----->");
-    ControlTimeWake = 0;
-    numeroDisplay = 10;
-    statoBLT = true;
-    smartphoneConnect = false;
-    bubbleStation = true;
-   }
-}
-
-/*   -----> Da Abilitare, qualora ne avessimo bisogno!
-void closeBLTConnection()
-{
-  ESP_BT.end();
-  statoBLT = false;
-  bubbleStation = false;
-  smartphoneConnect = false;
-}
-*/
 
 //------------------ Funzione che viene richiamata solamente quando un client si connette al device tramite bluetooth -------------------------
 void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
@@ -117,44 +69,3 @@ void sendDataSmartphone()
   }
   closeConnectionSerial();                                              // Chiusura connessione serial bluetooth
 }
-
-
-//---------------------------------- << DEPRECATO >> -----------------------------------------------------------------------
-//----------------------------------------- Invio dati e connessione bubbleStation --------------------------------
-/*
- * -------------------- DA COMPLETARE --> IMPLEMETARE ANCHE LA BUBBLE STATION [APPENA POSSIBILE] -----------------
- * 
-void sendDataBLT()
-{
-  MACDevice = "";
-  MACDevice = scanArea("", "");                                         // Scansione area e viene restituito un MAC address qualora questo appartenga ad un BubbleStation
-  Serial.println(MACDevice);
-  if(MACDevice != "")                                                   // Solamente un BubbleStation restituirà un MAC address
-  {
-    Serial.println("DEVICE TROVATO -->");
-    bubbleStation = true;                                               // Attivato BubbleStation
-    Serial.println("STATION TROVATA----INIZIO COMUNICAZIONE!");
-    Serial.println(MACDevice);
-    ESP_BT.begin("BubbleBox_Device");                                   // Inizializzazione Serial Bluetooth per comunicazione seriale con BubbleStation
-    accendiDisplay("", "", "", "");                                     // Accensione display con schermata di invio dati
-    while(bubbleStation)                                                // Fino a che la bubblestation sarà attivo, la comunicazione avviene
-    {
-      Serial.println("Bluetooth Device is Ready to Pair");
-      if (ESP_BT.available()) 
-      {
-        int incoming = ESP_BT.read(); //Read what we recevive
-        Serial.print("Received:"); 
-        Serial.println(incoming);
-        ESP_BT.println("Digita 2 per chiudere tutto!");
-        if(incoming == 50)                                              // Se la bubble station invia un segnale (un 2) la comunicazione si chiude
-        {
-          ESP_BT.println("Chiusura...");
-          bubbleStation = false;
-        }
-      }
-      delay(500);
-    }
-    closeConnectionSerial();                                            // Il device continua il suo normale funzionamento
-  }
-}
-*/

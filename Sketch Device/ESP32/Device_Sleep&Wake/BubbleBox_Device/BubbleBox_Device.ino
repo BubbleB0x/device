@@ -37,7 +37,7 @@ const int statoDisplay = 14;          // Bottone per cambiare il display --> 4 t
 int numeroDisplay = 0;                // Numero del display corrispondente
 
 //------- Caratteristiche Connessione BLT Seriale ------------------------------------
-const int connBLT = 26;               // Bottone per la connessione BLT seriale
+const int selFunction = 26;           // Bottone per la selezione della funzione display
 bool statoBLT = false;                // Bluetooth seriale attivato/disattivato
 bool bubbleStation = false;           // BubbleStation rilevata [DEPRECATO] --> UTILIZZO DELLA BUBBLESTATION SOSPESO!
 bool smartphoneConnect = false;       // Connessione Bluetooth Serial tramite smartphone attivata/disattivata
@@ -50,7 +50,8 @@ bool smartphoneConnect = false;       // Connessione Bluetooth Serial tramite sm
 #include "ESP32_SleepWake.h"          // Libreria per lo Sleep&Wake ESP32
 #include "ESP32_SerialBLT.h"          // Libreria per la connessione Bluetooth Seriale
 #include "RTC_Clock.h"                // Libreria per ora e data
-#include "ESP32_WPS.h"                // Libreria per la connessione WiFi
+#include "ESP32_WiFi.h"                // Libreria per la connessione WiFi
+#include "SelectFunction_Button.h"    // Libreria per la selezione della funzione display tramite bottone
 
 
 //------------------------- SETUP ----------------------------------------------------
@@ -66,8 +67,8 @@ void setup()
   //---------------------------------------------------------------------------------------
 
   // ------------ Settaggio bottone Interrupt per cambiare il display sulla connessione BLT e WPS ---------------------
-  pinMode(connBLT, INPUT_PULLUP);
-  attachInterrupt(connBLT, connessioneBLT, RISING);
+  pinMode(selFunction, INPUT_PULLUP);
+  attachInterrupt(selFunction, selectFunction, RISING);
   //---------------------------------------------------------------------------------------
 
   //------------ Settaggio INPUT proveniente dall'RFNano per i dispositivi nei dintorni----

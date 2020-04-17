@@ -42,9 +42,27 @@ void initRTC()
   }
 }
 
-void setRTC()
+//-------------- Settaggio Data e Ora RTC ------------------------------------------------
+void setRTC(int A, int M, int G, int O, int Mi, int S)
 {
-  rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+  Serial.println();
+  Serial.print(A);       // Anno
+  Serial.print("-");
+  Serial.print(M);       // Mese
+  Serial.print("-");
+  Serial.print(G);       // Giorno
+  Serial.print(" ");
+  Serial.print(O+1);     // Ora
+  Serial.print(":");
+  Serial.print(Mi);      // Minuti
+  Serial.print(":");
+  Serial.print(S);       // Secondi
+  if(O+1 == 24)
+  {
+    O = 0;
+  }
+  rtc.adjust(DateTime(A, M, G, O+1, Mi, S));
+  Serial.println("Orologio settato con ora server NTP");
 }
 
 //------------------ GET DATA RTC CLOCK ----------------------------------

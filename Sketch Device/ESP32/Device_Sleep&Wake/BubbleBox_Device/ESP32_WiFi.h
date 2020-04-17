@@ -13,8 +13,10 @@
 #include "WiFi.h"
 #include "esp_wps.h"
 #include "HTTPClient.h"
-#include <base64.h>
-#include <ArduinoJson.h>
+#include <base64.h>                                             // Libreria Decode/Encode in Base64
+#include <ArduinoJson.h>                                        // Libreria per la gestione dei file JSON
+
+#include "time.h"                                               // Libreria per gestire data e ora attravero un server NTP
 
 //--------------- definizione credenziali di accesso WPS ----------------------------------------------------------------------------------
 #define ESP_WPS_MODE      WPS_TYPE_PBC
@@ -31,15 +33,19 @@ static esp_wps_config_t config;                                 // Configurazion
 bool connessoWPS = false;
 
 //------------------------- Credenziali di connessione alla BubbleStation --------------------------------------------------------------
-const char* ssid = "********";
-const char* password =  "**********";
+const char* ssid = "Linkem1_05B76F";
+const char* password =  "Casa1234";
 
-//--------------- Caratteristiche server ---------------------
+//--------------- Caratteristiche server BubbleBox ---------------------
 const char* serverNamePost = "http://37.77.97.144:9200/devices/blast/";
 const char* serverNameGetToken = "http://37.77.97.144:9200/loginDevice/";
 const char* pass = "prova2";
 HTTPClient http;
 
+//-------------- Caratteristiche server NTP Clock -----------------------
+const char* ntpServer = "pool.ntp.org";
+const long  gmtOffset_sec = 0;
+const int   daylightOffset_sec = 3600;
 
 //------------------------------------------------------------------------------------
 void wpsInitConfig(){
@@ -102,6 +108,31 @@ void WiFiEvent(WiFiEvent_t event, system_event_info_t info){
 }
 
 //-------------------------------------------------------------------------------------------------------
+
+//---------------- Ottenimento Data e Ora da un server NTP ----------------------------------------------
+void setLocalTime()
+{
+  struct tm timeinfo;
+  if(!getLocalTime(&timeinfo))
+  {
+    Serial.println("Failed to obtain time");
+    return;
+  }
+  char anno[5];
+  char mese[3];
+  char giorno[3];
+  char ora[3];
+  char minuti[3];
+  char secondi[3];
+  strftime(anno, sizeof(anno), "%Y", &timeinfo);
+  strftime(mese, sizeof(mese), "%m", &timeinfo);
+  strftime(giorno, sizeof(giorno), "%d", &timeinfo);
+  strftime(ora, sizeof(ora), "%H", &timeinfo);
+  strftime(minuti, sizeof(minuti), "%M", &timeinfo);
+  strftime(secondi, sizeof(secondi), "%S", &timeinfo);
+
+  setRTC(atoi(anno), atoi(mese), atoi(giorno), atoi(ora), atoi(minuti), atoi(secondi)); // RTC_CLock.h
+}
 
 //---------------- Ottenimento token per effettuare le POST al server -----------------------------------
 String getToken()
@@ -170,6 +201,10 @@ void sendDataServer()
   }
   //--------------------------------------------------------------------------------------------------------------------------
   delay(2000);
+
+  //----------------------------- Inizializzazione richiesta Server NTP per aggiornare Data e Ora RTC ----------------------------
+  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+  setLocalTime();
 }
 
 //------------------------------ Funzione di connessione alla rete WIFI tramite WPS -------------------------------------------
