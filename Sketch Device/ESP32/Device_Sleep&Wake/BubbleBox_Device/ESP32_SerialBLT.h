@@ -24,18 +24,30 @@ void IRAM_ATTR connessioneBLT()
       Serial.println();
       Serial.println("--------- INVIO DATI SMARTPHONE --->");
       ControlTimeWake = 0;
-      numeroDisplay = 7;
+      numeroDisplay = 8;
       statoBLT = true;
       smartphoneConnect = true;
+      bubbleStation = false;
     } 
    if(numeroDisplay == 3)
    {
     Serial.println();
     Serial.println("--------- CONNESSIONE WPS ----->");
     ControlTimeWake = 0;
-    numeroDisplay = 6;
+    numeroDisplay = 7;
     statoBLT = true;
     smartphoneConnect = false;
+    bubbleStation = false;
+   }
+   if(numeroDisplay == 5)
+   {
+    Serial.println();
+    Serial.println("--------- CONNESSIONE STATION ----->");
+    ControlTimeWake = 0;
+    numeroDisplay = 10;
+    statoBLT = true;
+    smartphoneConnect = false;
+    bubbleStation = true;
    }
 }
 
@@ -74,7 +86,7 @@ void closeConnectionSerial()
   ControlTimeWake = 14;       // Tempo del device viene portato a termine per farlo ripartire e ricaricare tutto
   numeroDisplay = 1;          // Schermata display viene portata alla principale --> Orologio
   statoBLT = false;           // Stato attivo/disattivo BLT portato a disattivato
-  // bubbleStation = false;      // Ritrovamento bubblestation portato a disattivato [DEPRECATO]
+  bubbleStation = false;      // Ritrovamento bubblestation portato a disattivato [DEPRECATO]
   smartphoneConnect = false;  // Ritrovamento smartphone portato a disattivato
 
   //--------------------------> Il device riprende il suo normale funzionamento

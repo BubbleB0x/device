@@ -102,7 +102,17 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.display();
     break;
 
-    case 5:                                                 // QRcode device
+    case 5:                                                 // Connessione ad una station --> BUBBLE STATION/SMARTPHONE STATION
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.drawXbm(40, 1, 50, 50, Station_Logo_bits);
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "CONNESSIONE STATION");
+    display.display();
+    break;
+
+    case 6:                                                 // QRcode device
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -112,7 +122,7 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.display();
     break;
 
-    case 6:                                                 // Connessione WIFI
+    case 7:                                                 // Connessione WIFI WPS --> Richiesta di attivazione bottone WPS sull'AP
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -122,7 +132,7 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.display();
     break;
 
-    case 7:                                                  // Connessione smartphone e le credenziali di accesso e connessione
+    case 8:                                                  // Connessione smartphone e le credenziali di accesso e connessione
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
@@ -135,13 +145,23 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.display();
     break;
 
-    case 8:                                                  // Connessione WIFI avvenuta con successo
+    case 9:                                                  // Schermata di invio dati al server
     display.displayOn();
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.drawXbm(35, 3, 65, 50, WiFiSend_bits);
     display.setFont(ArialMT_Plain_10);
     display.drawString(64, 50, "INVIO DATI...");
+    display.display();
+    break;
+
+    case 10:                                                 // Connessione ad una station --> BUBBLE STATION/SMARTPHONE STATION
+    display.displayOn();
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.drawXbm(40, 1, 50, 50, Station_Logo_bits);
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(64, 50, "RICERCA...");
     display.display();
     break;
 
@@ -166,7 +186,7 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
 void spegniDisplay()
 {
   smartphoneConnect = false;
-  // bubbleStation = false; [DEPRECATO]
+  bubbleStation = false;
   statoBLT = false;
   numeroDisplay = 1;
   display.displayOff();
@@ -176,11 +196,11 @@ void spegniDisplay()
 void IRAM_ATTR controlloCambioDisplay()
 {
   smartphoneConnect = false;
-  // bubbleStation = false; [DEPRECATO]
+  bubbleStation = false;
   statoBLT = false;
   ++numeroDisplay;
   ControlTimeWake = 0; 
-  if(numeroDisplay > 5)
+  if(numeroDisplay > 6)
    {
      numeroDisplay = 1;  
    }

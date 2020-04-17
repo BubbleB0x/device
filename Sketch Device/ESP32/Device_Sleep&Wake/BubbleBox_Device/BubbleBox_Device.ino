@@ -39,7 +39,7 @@ int numeroDisplay = 0;                // Numero del display corrispondente
 //------- Caratteristiche Connessione BLT Seriale ------------------------------------
 const int connBLT = 26;               // Bottone per la connessione BLT seriale
 bool statoBLT = false;                // Bluetooth seriale attivato/disattivato
-// bool bubbleStation = false;           // BubbleStation rilevata [DEPRECATO] --> UTILIZZO DELLA BUBBLESTATION SOSPESO!
+bool bubbleStation = false;           // BubbleStation rilevata [DEPRECATO] --> UTILIZZO DELLA BUBBLESTATION SOSPESO!
 bool smartphoneConnect = false;       // Connessione Bluetooth Serial tramite smartphone attivata/disattivata
 
 //------- Librerie realizzate "AD HOC" per la gestione dell'intero programma---------------------------------
@@ -96,8 +96,15 @@ void loop()
     }
     else
     {
-      // ------ Connessione alla WIFI e invio dati tramite REST API
-      connectWPS();                                                                 // Connessione WPS --> ESP32_WPS.h
+      if(bubbleStation)                                                             // Controllo se ci si vuole connettere alla Station o ad un WIFI tramite WPS
+      {
+        connectStation();                                                           // Connessione STATION -_> ESP32_WPS.h
+      }
+      else
+      {
+        //---- Ci si vuole connettere ad una rete WIFI tramite WPS
+        connectWPS();                                                               // Connessione WPS --> ESP32_WPS.h
+      }
     }
   }
   else
