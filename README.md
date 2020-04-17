@@ -58,6 +58,13 @@ ________________________________________________________________________________
 		- Arduino IDE > Sketch > #Include libreria > Aggiungi libreria da file .ZIP
 	
 	----------> TUTTE LE LIBRERIE CHE SERVONO SONO INSERITE NELLA DIRECTORY `/Library`
+	
+* Possibili problematiche: 
+	- è possibile che quando si connette l'ESP32 alla porta USB del PC non venga letta
+	- aprire `Gestione Dispoitivi`
+	- vedere se tra i device presenti c'è qualche problema o warning
+	- andare sul problema e cliccare col tasto destro > `Aggiorna Driver`
+	- il problema dovrebbe essere rsolto riavviando la IDE di Arduino
 
 _____________________________________________________________________________________________________
 	
