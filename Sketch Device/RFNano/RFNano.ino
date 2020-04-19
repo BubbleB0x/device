@@ -78,9 +78,9 @@ void ricezione()
     if (strcmp (dataRicev.id,"BUBBLEBOX_DEVICE") == 0)
     {
       Serial.println("BUBBLE BOX TROVATO!");
+      digitalWrite(AccensioneBubbleBox, HIGH);
       clockTime = 0;
     }
-    digitalWrite(AccensioneBubbleBox, HIGH);
     Serial.println("________________RICEZIONE__________________ ");
     Serial.println("Package: ");
     Serial.print("ID:");
