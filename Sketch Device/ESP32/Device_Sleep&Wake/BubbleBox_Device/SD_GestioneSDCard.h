@@ -22,6 +22,7 @@
 
 String nomeFile;
 String nomeFile2;
+String nomeFile3;
 String bufferFile;
 
 String oraUltimoContatto;             // Ora del contatto
@@ -118,10 +119,15 @@ void setSDCard(String NomeFile)
     {
       writeFile(SD, nomeFile.c_str(), "");                       // creazione del file dis storage giornaliero
     }
-    nomeFile2 = "/contacts_all.txt";                              // Nome del file
-    if(!readFile(SD, nomeFile2.c_str()))                         // Se il file giornaliero esiste non se ne crea un altro
+    nomeFile2 = "/contacts_all.txt";                             // Nome del file
+    if(!readFile(SD, nomeFile2.c_str()))                         // Se il file di tutti i contatti non esiste viene creato
     {
       writeFile(SD, nomeFile2.c_str(), "");                      // creazione del file dis storage giornaliero
+    }
+    nomeFile3 = "/WIFI.txt";                                     // Nome del file
+    if(!readFile(SD, nomeFile3.c_str()))                         // Se il file con tutti i WIFI con SSID e PASS non esiste, viene creato
+    {
+      writeFile(SD, nomeFile3.c_str(), "Prova|Prova\n");         // creazione del file dis storage giornaliero
     }
 }
 

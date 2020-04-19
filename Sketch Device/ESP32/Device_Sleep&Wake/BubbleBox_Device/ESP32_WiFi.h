@@ -11,6 +11,7 @@
  */
 
 #include "WiFi.h"
+#include <WiFiMulti.h>
 #include "esp_wps.h"
 #include "HTTPClient.h"
 #include <base64.h>                                             // Libreria Decode/Encode in Base64
@@ -33,8 +34,7 @@ static esp_wps_config_t config;                                 // Configurazion
 bool connessoWPS = false;
 
 //------------------------- Credenziali di connessione alla BubbleStation --------------------------------------------------------------
-const char* ssid = "Linkem1_05B76F";
-const char* password =  "Casa1234";
+WiFiMulti wifiMulti;
 
 //--------------- Caratteristiche server BubbleBox ---------------------
 const char* serverNamePost = "http://37.77.97.144:9200/devices/blast/";
@@ -260,29 +260,59 @@ void connectWPS()
   }
 }
 
+int controlFileWiFi(String stringWiFi)
+{
+  Serial.println("CONTROLLO WIFI");
+  for(int i=0; i<stringWiFi.length(); i++)
+       {
+        String a = stringWiFi.substring(i, i+1);
+        if(a == "|")
+        {
+          return i;
+        }
+       }
+       return -1;
+}
 //------------------- Connessione ad una Bubblestation o allo smartphone tramite hotspot --------------------------------
 void connectStation()
 {
-  int countStation = 0;
-  if(WiFi.status() != WL_CONNECTED)                               // Verifico se il device è già connesso ad una rete
-  {
-    WiFi.begin(ssid, password);                                   // Effettuo la connessione con credenziali alla bubblestation qualora non fosse già connesso
-    while (WiFi.status() != WL_CONNECTED && countStation < 30)    // prova la connessione per 15 secondi
+  String bufferFile;
+  char ssid_wifi[20] = "";                                              // SSID WIFI 
+  char pass_wifi[20] = "";                                              // Password WIFI
+  File file = SD.open("/WIFI.txt");                                     // Leggo il file contenente tutte le reti WIFI a cui posso accedere
+  Serial.print("Read from file: ");
+  while(file.available())
     {
-      delay(500);
-      Serial.println("Connecting to WiFi..");
-      ++countStation;
+       bufferFile = file.readStringUntil('\n');                         // veridfico che il file contine delle righe --> ogni riga equivale ad un WIFI a cui è possibile connettersi
+       Serial.println();
+       Serial.println(bufferFile);
+       int num_car = controlFileWiFi(bufferFile);
+       if(num_car > 0)
+       {
+        bufferFile.substring(0 , num_car).toCharArray(ssid_wifi,20);
+        bufferFile.substring(num_car+1 , bufferFile.length()).toCharArray(pass_wifi,20);
+        Serial.println(ssid_wifi);
+        Serial.println(pass_wifi);
+        wifiMulti.addAP(ssid_wifi, pass_wifi);                          // COnnessione multipla a più Access Point, in modo tale che il device si connette al AP più vicino o presente in zona
+       }
     }
-  }
+    file.close(); 
+    
+    Serial.println("Connection...");
+    if(wifiMulti.run() == WL_CONNECTED)                                 // COnnessione AP avvenuta con successo
+    {
+        Serial.println("");
+        Serial.println("WiFi connected");
+        Serial.println("IP address: ");
+        Serial.println(WiFi.SSID());
+        Serial.println(WiFi.localIP());
 
-  if(WiFi.status() == WL_CONNECTED)                             // Si è connessi ad una rete WIFI
-  {
-    sendDataServer();                                           // Invio dati al server tramite POST
-  }
+        sendDataServer();                                              // Invio dati al server tramite POST
+    }
   
-  ControlTimeWake = 14;                                         // |
-  numeroDisplay = 1;                                            // |   Resetto i parametri
-  statoBLT = false;                                             // |   del device
-  smartphoneConnect = false;                                    // |
-  bubbleStation = false;                                        // |
+  ControlTimeWake = 14;                                               // |
+  numeroDisplay = 1;                                                  // |   Resetto i parametri
+  statoBLT = false;                                                   // |   del device
+  smartphoneConnect = false;                                          // |
+  bubbleStation = false;                                              // |
 }
