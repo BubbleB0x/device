@@ -39,8 +39,9 @@ int numeroDisplay = 0;                // Numero del display corrispondente
 //------- Caratteristiche Connessione BLT Seriale ------------------------------------
 const int selFunction = 26;           // Bottone per la selezione della funzione display
 bool statoBLT = false;                // Bluetooth seriale attivato/disattivato
-bool bubbleStation = false;           // BubbleStation rilevata [DEPRECATO] --> UTILIZZO DELLA BUBBLESTATION SOSPESO!
+bool bubbleStation = false;           // BubbleStation rilevata --> La bubbleStatio è ho un normale AP (router WIFI) o un device dato in dotazione con il device BUBBLEBOX
 bool smartphoneConnect = false;       // Connessione Bluetooth Serial tramite smartphone attivata/disattivata
+bool openConnBLT = false;             // Apertura connessione serial bluetooth
 
 //------- Librerie realizzate "AD HOC" per la gestione dell'intero programma---------------------------------
 #include "Display_IconeDisplay.h"     // Libreria per la gestione delle icone del display 
@@ -50,7 +51,7 @@ bool smartphoneConnect = false;       // Connessione Bluetooth Serial tramite sm
 #include "ESP32_SleepWake.h"          // Libreria per lo Sleep&Wake ESP32
 #include "ESP32_SerialBLT.h"          // Libreria per la connessione Bluetooth Seriale
 #include "RTC_Clock.h"                // Libreria per ora e data
-#include "ESP32_WiFi.h"                // Libreria per la connessione WiFi
+#include "ESP32_WiFi.h"               // Libreria per la connessione WiFi
 #include "SelectFunction_Button.h"    // Libreria per la selezione della funzione display tramite bottone
 
 
@@ -85,11 +86,10 @@ void setup()
 //-------------------------- LOOP ----------------------------------------------------------
 void loop() 
 {
-  
   //---------- Controllo stato connessione Bluetooth Seriale, per connettere smartphone o WIFI --> Disabilito tutto il resto del device 
   if(statoBLT)
   {
-    accendiDisplay("", "", "", "");
+    accendiDisplay("", "", "", "");                                                 // Accensione schermo --> Display_GestioneDisplay.h --> passo come parametri delle stringhe vuote perchè nella schermata che sto per aprire non ho bisogno di fìdata, ora e altre info
     if(smartphoneConnect)                                                           // Controllo se sta avvenendo una connessione ad uno smartphone
     {
       // ------ Connessione e invio dati allo smartphone
@@ -120,8 +120,13 @@ void loop()
   
     // Controllo per accendere o tener acceso il device in base a quanto tempo rimane in attesa o se non riceve nessun segnale dall'RFNANO
     // Controllo tempo di accensione e RF-NANO non trova device nei dintorni
-    if(ControlTimeWake == 15 && digitalRead(RF_Nano) == LOW)
+    // Controllo se è stato tentato un pairing con uno smartphone tramite bluetooth
+    //  qualora fosse avvenuto, e avviene una disconnessione o un cambio schermo, spengo lo schermo
+    //  perchè ci sono dei problemi sulla scheda a ritornare al normale funzionamento dopo aver spento la connessione bluetooth serial
+    //  ----> Se spengo il device e poi lo riavvio questo problema è bypassato!
+    if((ControlTimeWake == 15 && digitalRead(RF_Nano) == LOW) || openConnBLT)
     {
+      openConnBLT = false;                                                          // Riporto la variabile di connessione BLT serial a false per ripristinare il servizio qualora si fosse tentato di connettersi tramite smartphone
       spegniDisplay();                                                              // --> Display_GestioneDisplay.h
       setSleepWake();                                                               // --> ESP32_Sleep&Wake.h
     }
@@ -130,7 +135,7 @@ void loop()
       // Il tempo va avanti ma l'RF-NANO continua a trovare dispositivi nelle vicinanze
       if(digitalRead(RF_Nano) == HIGH)
       {
-        ControlTimeWake = 0;
+        ControlTimeWake = 0;                                                        // Riporto a zero il contatore
       }
     }
   }

@@ -49,6 +49,7 @@ void sendDataSmartphone()
 {
   Serial.println("Connessione smartphone in corso...");
   ESP_BT.begin("BubbleBox_Device");                                     // Abilito la connessione serial bluetooth
+  openConnBLT = true;                                                   // Apertura connessione BLT
   while(smartphoneConnect)                                              // Fino a che la schermata è aperto controllo se arrivano dati dagli smartphone collegati
   {
     Serial.println("Bluetooth Device is Ready Smartphone...");          // Il device bubblebox è pronto per ricevere e inviare dati

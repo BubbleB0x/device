@@ -108,7 +108,7 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.drawXbm(40, 1, 50, 50, Station_Logo_bits);
     display.setFont(ArialMT_Plain_10);
-    display.drawString(64, 50, "CONNESSIONE STATION");
+    display.drawString(64, 50, "CONNESSIONE A.P.");
     display.display();
     break;
 
@@ -141,7 +141,7 @@ void accendiDisplay(String Data, String Ora, String Temp, String NContatti)
     display.drawString(64, 12, "Tramite Bluetooth");
     display.drawString(64, 25, "NOME DEVICE:");
     display.setFont(ArialMT_Plain_10);
-    display.drawString(64, 40, "[BubbleBox_Device]");
+    display.drawString(64, 40, "[BubbleBox_Device | BubbleBox]");
     display.display();
     break;
 
