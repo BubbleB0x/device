@@ -134,8 +134,8 @@ ________________________________________________________________________________
 |   GPIO 18    | -   |  -   |   -  |   SCK   | -  |  - |
 |   GPIO 5    | -   |  -   |   -  |   CS   | -  |  - |
 |   GPIO 14    | -   |  -   |   -  |   -   | OK(Cambio Display)  |  - |
-|   GPIO 26    | -   |  -   |   -  |   -   | -  |  OK(Cambio Display) |
-|   GPIO 2    | -   |  -   |   -  |   -   | -  |  OK(WAKE) |
+|   GPIO 26    | -   |  -   |   -  |   -   | -  |  OK(Sel. Opzione Display) |
+|   GPIO 2    | D4(Wake)  |  -   |   -  |   -   | -  |  - |
 |   GPIO 15    | -   |  -   |   -  |   -   | OK(WAKE)  |  - |
 |   3V    | -   |  VCC  |   VCC  |   -   | VCC  |  VCC |
 |   5V    | -   |  -  |   -  |   VCC   | -  |  - |
