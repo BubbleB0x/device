@@ -95,9 +95,7 @@ ________________________________________________________________________________
 		- Selezionare Porta
 		- Installare sketch contenuto nella directory `Sketch Device/RFNano`
 	- ESP32:
-		- Aprire `ESP32/Device_Sleep&Wake/ESP_WPS.h`
-		- Modificare le righe 34 e 35 con le credenziali della BUBBLESTATION
-		- Salvare e chiudere
+		- Aprire Arduino IDE
 		- Inserire la scheda ESP32
 		- Arduino IDE > Strumenti > Scheda > `ESP32 Dev Model`
 		- Arduino IDE > Strumenti > Partition Scheme > `NO OTA (2MB APP/2MB SPIFFS)`
@@ -113,12 +111,11 @@ ________________________________________________________________________________
 | -----------|---------|-------------|--------|-----------------|
 |   ESP32    | 50mA    |  0,05 mA     |   9€   |   Wi-Fi & BLE   |
 |   RF-NANO  | 19mA    |    0,05 mA   |   8€   |   Radio Wave    |
-|Display OLED| 40mA    |   0,9 mA     |   8€   |   Display 0.96" |
-| Lettore SD |  1mA    |   0 mA      |   5€   |   Data Storage  |
+|Display OLED| 30mA    |   0,9 mA     |   8€   |   Display 0.96" |
+| Lettore SD |  30mA    |   5 mA      |   5€   |   Data Storage  |
 | Modulo RTC |0,8mA    | 0,08 mA     |   6€   | Orologio e data |
-|Modulo GSM(NO) |  200mA    | 1 mA      | 9€     | Comunicazione dati tramite scheda SIM |
 |  |   *Totale*  |  *Totale* |  *Totale*  |  |
-|   - | 310,8(110) mA   |  2,08 mA     |   45€ (36€) |   -   |
+|   - | 130 mA   |  6,08 mA     |   36€ |   -   |
 
 
 ## Connessioni Dispositivi(Implementazione Device) ##
