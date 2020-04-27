@@ -9,6 +9,7 @@ ________________________________________________________________________________
 5. Firmware Schede
 6. Consumi, costi e caratteristiche
 8. Connessione moduli(implementazione device)
+9. Funzionamento
 
 ______________________________________________________________________________________________
 
@@ -116,6 +117,8 @@ ________________________________________________________________________________
 ## Connessioni Dispositivi(Implementazione Device) ##
 _________________________________________________________________________________________________________
 
+<img src="https://github.com/BubbleB0x/device/blob/master/circuits/Circuito_Fritzing.png"/>
+
 | *ESP32* | *RFNANO* |  *RTC*  | *DISPLAY* | *SD CARD* | *Bottone 1* | *Bottone 2*|
 | -----------|---------|-------------|--------|-----------------|---------|----------|
 |   GPIO 25    | D4   |  -    |   -  |   -   |  - |  -  |
@@ -132,3 +135,15 @@ ________________________________________________________________________________
 |   3V    | -   |  VCC  |   VCC  |   -   | VCC  |  VCC |
 |   5V    | -   |  -  |   -  |   VCC   | -  |  - |
 |   GND    | -   |  GND  |   GND  |   GND   | GND  |  GND |
+
+<img src="https://github.com/BubbleB0x/device/blob/master/circuits/Circuito_Semplice_2.jpg"/>
+
+## Funzionamento ##
+
+<img src="https://github.com/BubbleB0x/device/blob/master/scheme/Funzionamento_Generico.PNG"/>
+
+<img src="https://github.com/BubbleB0x/device/blob/master/scheme/Funzionamento_Device.PNG"/>
+
+### Flow-Chart ###
+
+<img src="https://github.com/BubbleB0x/device/blob/master/scheme/Funzionamento_FlowChart.png"/>
