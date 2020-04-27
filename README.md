@@ -27,6 +27,8 @@ A differenza di alcuni sistemi di tracciamento già presenti,
 il nostro fornisce un servizio funzionante in ogni luogo e offline, perché la raccolta avviene 
 prima in locale poi, quando disponibile, viene inoltrata online.
 
+---> [REPORT](https://github.com/BubbleB0x/device/blob/master/doc/report/Relazione_Bubblebox(RignanesePolenta).pdf)
+
 ----------------------------------------------------------------------------------------------------
 
 ## Moduli e dispositivi utilizzati (singolo device) ##
