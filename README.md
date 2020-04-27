@@ -15,17 +15,7 @@ ________________________________________________________________________________
 ## Descrizione ##
 ________________________________________________________________________________________________
 
-Sistema di rilevamento di prossimità per prevenire e rilevare l’espansione del COVID-19, 
-attraverso l’uso di un device (da realizzare) o smartphone (con una App attraverso l’ausilio di tecnologie Bluetooth).
-Oltre all’analisi dei dati, questo progetto, effettua soprattutto una raccolta puntuale,
-completa e organizzata, con dati pronti per essere analizzati.
-Il nome BubbleBox proviene proprio dall’idea di una bolla virtuale attorno ad ogni individuo che, 
-se violata, da quella di un altro, ottiene ID di quest’ultimo e invia la segnalazione ad un server online per analisi e verifiche future. 
-Se un individuo dovesse essere positivo al COVID-19 allora verranno allertate
-e controllate tutte le persone con cui è entrato in contatto senza ambiguità alcuna. 
-A differenza di alcuni sistemi di tracciamento già presenti, 
-il nostro fornisce un servizio funzionante in ogni luogo e offline, perché la raccolta avviene 
-prima in locale poi, quando disponibile, viene inoltrata online.
+Sistema di rilevamento di prossimità per prevenire e rilevare l’espansione del COVID-19 (e altre forme virali), attraverso l’uso di un device e di un App (non essenziale, ma che fornisce funzionalità aggiuntive) smartphone e web. Oltre all’analisi dei dati, questo progetto, effettua soprattutto una raccolta puntuale, completa, precisa e organizzata, con dati pronti per essere analizzati, infatti, il device effettuerà un vero proprio Edge Computing, in modo da gestire lui stesso i dati e presentarli, attraverso più canali comunicativi (Bluetooth smartphone o WiFi), al sistema server. Il nome BubbleBox proviene proprio dall’idea di una bolla virtuale attorno ad ogni individuo che, se violata, da quella di un altro, ottiene ID di quest’ultimo (in modo sicuro e anonimo) e invia la segnalazione ad un server online, dopo essere stato elaborato, per analisi e verifiche future. Se un individuo dovesse essere positivo al COVID-19 allora verranno allertate e controllate tutte le persone con cui è entrato in contatto senza ambiguità alcuna. A differenza di alcuni sistemi di tracciamento già presenti, il nostro fornisce un servizio funzionante in ogni luogo e offline, perché la raccolta avviene prima in locale poi, quando disponibile, viene inoltrata online.
 
 ---> [REPORT](https://github.com/BubbleB0x/device/blob/master/doc/report/Relazione_Bubblebox(RignanesePolenta).pdf)
 
